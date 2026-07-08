@@ -1,0 +1,502 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<!-- Hero Section -->
+<section class="bg-primary text-white py-5">
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-6">
+
+                <h1 class="display-4 fw-bold">
+                    Find Your Dream Job Today
+                </h1>
+
+                <p class="lead mt-3">
+                    Thousands of companies are hiring.
+                    Search jobs, apply online, and build your career.
+                </p>
+
+                <div class="mt-4">
+
+                    <a asp-controller="Jobs"
+                       asp-action="Index"
+                       class="btn btn-warning btn-lg me-2">
+
+                        Browse Jobs
+
+                    </a>
+
+                    <a asp-area="Identity"
+                       asp-page="/Account/Register"
+                       class="btn btn-outline-light btn-lg">
+
+                        Register
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-6 text-center">
+
+                <img src="~/images/job.png"
+                     class="img-fluid"
+                     style="max-height:420px;">
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- Search -->
+<section class="bg-light py-5">
+
+    <div class="container">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body">
+
+                <form>
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+
+                            <input class="form-control"
+                                   placeholder="Job title">
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <input class="form-control"
+                                   placeholder="Location">
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <select class="form-select">
+
+                                <option>Category</option>
+                                <option>IT</option>
+                                <option>Finance</option>
+                                <option>Marketing</option>
+                                <option>Healthcare</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-1">
+
+                            <button class="btn btn-primary w-100">
+
+                                Search
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Categories -->
+
+<section class="py-5">
+
+    <div class="container">
+
+        <h2 class="text-center mb-5">
+
+            Popular Categories
+
+        </h2>
+
+        <div class="row g-4">
+
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0 text-center">
+
+                    <div class="card-body">
+
+                        <h1>💻</h1>
+
+                        <h5>Software</h5>
+
+                        <p>350 Jobs</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0 text-center">
+
+                    <div class="card-body">
+
+                        <h1>📈</h1>
+
+                        <h5>Marketing</h5>
+
+                        <p>180 Jobs</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0 text-center">
+
+                    <div class="card-body">
+
+                        <h1>💰</h1>
+
+                        <h5>Finance</h5>
+
+                        <p>150 Jobs</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0 text-center">
+
+                    <div class="card-body">
+
+                        <h1>🏥</h1>
+
+                        <h5>Healthcare</h5>
+
+                        <p>220 Jobs</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Latest Jobs -->
+
+<section class="bg-light py-5">
+
+    <div class="container">
+
+        <h2 class="text-center mb-5">
+
+            Latest Jobs
+
+        </h2>
+
+        <div class="row g-4">
+
+            <div class="col-lg-4">
+
+                <div class="card shadow border-0">
+
+                    <div class="card-body">
+
+                        <h5>ASP.NET Core Developer</h5>
+
+                        <p class="text-muted">
+
+                            ABC Technologies
+
+                        </p>
+
+                        <p>
+
+                            📍 Chandigarh
+
+                        </p>
+
+                        <p>
+
+                            ₹8 - ₹12 LPA
+
+                        </p>
+
+                        <a href="#" class="btn btn-primary">
+
+                            Apply Now
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="card shadow border-0">
+
+                    <div class="card-body">
+
+                        <h5>UI / UX Designer</h5>
+
+                        <p class="text-muted">
+
+                            XYZ Pvt Ltd
+
+                        </p>
+
+                        <p>
+
+                            📍 Mohali
+
+                        </p>
+
+                        <p>
+
+                            ₹6 - ₹9 LPA
+
+                        </p>
+
+                        <a href="#" class="btn btn-primary">
+
+                            Apply Now
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="card shadow border-0">
+
+                    <div class="card-body">
+
+                        <h5>HR Executive</h5>
+
+                        <p class="text-muted">
+
+                            Infosys
+
+                        </p>
+
+                        <p>
+
+                            📍 Bangalore
+
+                        </p>
+
+                        <p>
+
+                            ₹5 - ₹7 LPA
+
+                        </p>
+
+                        <a href="#" class="btn btn-primary">
+
+                            Apply Now
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Statistics -->
+
+<section class="py-5 bg-primary text-white">
+
+    <div class="container">
+
+        <div class="row text-center">
+
+            <div class="col-md-3">
+
+                <h2>10K+</h2>
+
+                <p>Jobs Posted</p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h2>500+</h2>
+
+                <p>Companies</p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h2>30K+</h2>
+
+                <p>Candidates</p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h2>98%</h2>
+
+                <p>Success Rate</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Why Choose Us -->
+
+<section class="py-5">
+
+    <div class="container">
+
+        <h2 class="text-center mb-5">
+
+            Why Choose Us?
+
+        </h2>
+
+        <div class="row text-center">
+
+            <div class="col-md-4">
+
+                <div class="card border-0 shadow">
+
+                    <div class="card-body">
+
+                        <h3>🚀</h3>
+
+                        <h5>Fast Hiring</h5>
+
+                        <p>
+
+                            Connect with top employers quickly.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card border-0 shadow">
+
+                    <div class="card-body">
+
+                        <h3>✔</h3>
+
+                        <h5>Verified Companies</h5>
+
+                        <p>
+
+                            Every employer is verified.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card border-0 shadow">
+
+                    <div class="card-body">
+
+                        <h3>💼</h3>
+
+                        <h5>Career Growth</h5>
+
+                        <p>
+
+                            Thousands of opportunities await.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Call To Action -->
+
+<section class="bg-dark text-white py-5">
+    <div class="container text-center">
+        <h2>
+            Ready to Start Your Career?
+        </h2>
+        <p>
+
+            Join thousands of professionals who found their dream jobs.
+
+        </p>
+
+        <a asp-area="Identity"
+           asp-page="/Account/Register"
+           class="btn btn-warning btn-lg">
+
+            Create Free Account
+
+        </a>
+
+    </div>
+
+</section>
