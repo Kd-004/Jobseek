@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using mainProject.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,24 +18,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using mainProject.Data;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace mainProject.Areas.Identity.Pages.Account;
 
-public class RegisterModel : PageModel
+public class RegisterUserModel : PageModel
 {
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IUserStore<IdentityUser> _userStore;
     private readonly IUserEmailStore<IdentityUser> _emailStore;
-    private readonly ILogger<RegisterModel> _logger;
+    private readonly ILogger<RegisterUserModel> _logger;
     private readonly IEmailSender _emailSender;
 
-    public RegisterModel(
+    public RegisterUserModel(
         UserManager<IdentityUser> userManager,
         IUserStore<IdentityUser> userStore,
         SignInManager<IdentityUser> signInManager,
-        ILogger<RegisterModel> logger,
+        ILogger<RegisterUserModel> logger,
         IEmailSender emailSender)
     {
         _userManager = userManager;
@@ -121,6 +122,8 @@ public class RegisterModel : PageModel
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account with password.");
+                await _userManager.AddToRoleAsync(user, "Admin");
+
 
                 var userId = await _userManager.GetUserIdAsync(user);
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -167,7 +170,6 @@ public class RegisterModel : PageModel
                 $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
         }
     }
-
     private IUserEmailStore<IdentityUser> GetEmailStore()
     {
         if (!_userManager.SupportsUserEmail)

@@ -21,20 +21,20 @@ using mainProject.Data;
 
 namespace mainProject.Areas.Identity.Pages.Account;
 
-public class RegisterModel : PageModel
+public class RegisterAdminModel : PageModel
 {
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IUserStore<IdentityUser> _userStore;
     private readonly IUserEmailStore<IdentityUser> _emailStore;
-    private readonly ILogger<RegisterModel> _logger;
+    private readonly ILogger<RegisterAdminModel> _logger;
     private readonly IEmailSender _emailSender;
 
-    public RegisterModel(
+    public RegisterAdminModel(
         UserManager<IdentityUser> userManager,
         IUserStore<IdentityUser> userStore,
         SignInManager<IdentityUser> signInManager,
-        ILogger<RegisterModel> logger,
+        ILogger<RegisterAdminModel> logger,
         IEmailSender emailSender)
     {
         _userManager = userManager;
@@ -121,6 +121,8 @@ public class RegisterModel : PageModel
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account with password.");
+                await _userManager.AddToRoleAsync(user, "Admin");
+
 
                 var userId = await _userManager.GetUserIdAsync(user);
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
