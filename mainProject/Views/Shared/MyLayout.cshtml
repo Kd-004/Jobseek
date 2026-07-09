@@ -605,7 +605,7 @@
                                 Pages
                                 <i class="nav-arrow bi bi-chevron-right"></i>
                             </p>
-                        </a>
+                        </a> 
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <a href="./pages/profile.html" class="nav-link">
@@ -868,7 +868,7 @@
             @RenderBody()
         </main>
     </div>
-
+    
     <footer class="app-footer">
         <!--begin::To the end-->
         <div class="float-end d-none d-sm-inline">Anything you want</div>
@@ -881,6 +881,8 @@
         All rights reserved.
         <!--end::Copyright-->
     </footer>
+   
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -895,6 +897,7 @@
     <script src="~/assets/js/adminlte.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+   
 </body>
 </html>
 

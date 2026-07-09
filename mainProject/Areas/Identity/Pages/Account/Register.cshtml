@@ -5,34 +5,87 @@
     ViewData["Title"] = "Choose Registration Type";
 }
 
-<div class="container mt-5">
+<div class="container py-5">
+
     <div class="row justify-content-center">
-        <div class="col-md-6">
 
-            <div class="card shadow">
-                <div class="card-header text-center">
-                    <h2>Select Registration Type</h2>
-                </div>
+        <div class="col-lg-10">
 
-                <div class="card-body">
+            <div class="text-center mb-5">
+                <h1 class="fw-bold">Create Your Account</h1>
+                <p class="text-muted fs-5">
+                    Choose how you would like to register on JobPortal.
+                </p>
+            </div>
 
-                    <div class="d-grid gap-3">
+            <div class="row g-4">
 
-                        <a asp-page="./RegisterUser"
-                           class="btn btn-primary btn-lg">
-                            Register as User
-                        </a>
+                <!-- User Card -->
+                <div class="col-md-6">
 
-                        <a asp-page="./RegisterAdmin"
-                           class="btn btn-success btn-lg">
-                            Register as Admin
-                        </a>
+                    <div class="card registration-card h-100 border-0 shadow-sm">
+
+                        <div class="card-body text-center p-5">
+
+                            <div class="icon-circle bg-primary-subtle text-primary mb-4">
+                                ??
+                            </div>
+
+                            <h3 class="fw-bold mb-3">
+                                Job Seeker
+                            </h3>
+
+                            <p class="text-muted mb-4">
+                                Search thousands of jobs, apply instantly,
+                                upload your resume and track your applications.
+                            </p>
+
+                            <a asp-page="./RegisterUser"
+                               class="btn btn-primary btn-lg w-100">
+                                Register as User
+                            </a>
+
+                        </div>
 
                     </div>
 
                 </div>
+
+                <!-- Admin Card -->
+                <div class="col-md-6">
+
+                    <div class="card registration-card h-100 border-0 shadow-sm">
+
+                        <div class="card-body text-center p-5">
+
+                            <div class="icon-circle bg-success-subtle text-success mb-4">
+                                ??
+                            </div>
+
+                            <h3 class="fw-bold mb-3">
+                                Employer / Admin
+                            </h3>
+
+                            <p class="text-muted mb-4">
+                                Post jobs, manage applicants,
+                                and hire the best talent for your company.
+                            </p>
+
+                            <a asp-page="./RegisterAdmin"
+                               class="btn btn-success btn-lg w-100">
+                                Register as Admin
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
+
     </div>
+
 </div>
