@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using mainProject.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace mainProject.Data
@@ -9,5 +10,7 @@ namespace mainProject.Data
             : base(options)
         {
         }
+       // public DbSet<Job> Jobs { get; set; }
+        public DbSet<Company> Companies { get; set; }
     }
 }

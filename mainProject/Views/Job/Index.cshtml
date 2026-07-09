@@ -1,0 +1,85 @@
+﻿@* @model IEnumerable<mainProject.Models.Job>
+
+@{
+    ViewData["Title"] = "Job List";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Job List</h2>
+
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Post New Job
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Job Title</th>
+                <th>Category</th>
+                <th>Location</th>
+                <th>Employment Type</th>
+                <th>Experience</th>
+                <th>Qualification</th>
+                <th>Salary</th>
+                <th>Vacancy</th>
+                <th>Last Date</th>
+                <th>Status</th>
+                <th width="180">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.JobTitle</td>
+                        <td>@item.Category</td>
+                        <td>@item.Location</td>
+                        <td>@item.EmploymentType</td>
+                        <td>@item.Experience</td>
+                        <td>@item.Qualification</td>
+                        <td>₹@item.Salary</td>
+                        <td>@item.Vacancy</td>
+                        <td>@item.LastDateToApply.ToString("dd-MM-yyyy")</td>
+                        <td>
+                            @if (item.Status == "Open")
+                            {
+                                <span class="badge bg-success">@item.Status</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">@item.Status</span>
+                            }
+                        </td>
+
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.JobId" class="btn btn-info btn-sm">
+                                Details
+                            </a>
+
+                            <a asp-action="Edit" asp-route-id="@item.JobId" class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+
+                            <a asp-action="Delete" asp-route-id="@item.JobId" class="btn btn-danger btn-sm">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="11" class="text-center text-danger">
+                        No Jobs Available
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div> *@

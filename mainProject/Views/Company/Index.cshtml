@@ -1,0 +1,105 @@
+﻿@model IEnumerable<mainProject.Models.Company>
+
+@{
+    ViewData["Title"] = "Companies";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Company List</h2>
+
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add Company
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover table-striped">
+
+        <thead class="table-dark">
+            <tr>
+                <th>Logo</th>
+                <th>Company Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Website</th>
+                <th>Industry</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Created Date</th>
+                <th width="220">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.Logo))
+                            {
+                                <img src="~/uploads/@item.Logo"
+                                     width="60"
+                                     height="60"
+                                     class="rounded-circle" />
+                            }
+                            else
+                            {
+                                <span>No Logo</span>
+                            }
+                        </td>
+
+                        <td>@item.CompanyName</td>
+                        <td>@item.Email</td>
+                        <td>@item.Phone</td>
+                        <td>
+                            <a href="@item.Website" target="_blank">
+                                @item.Website
+                            </a>
+                        </td>
+                        <td>@item.Industry</td>
+                        <td>@item.City</td>
+                        <td>@item.Country</td>
+                        <td>@item.CreatedDate.ToString("dd-MM-yyyy")</td>
+
+                        <td>
+                            <a asp-action="Details"
+                               asp-route-id="@item.Id"
+                               class="btn btn-info btn-sm">
+                                Details
+                            </a>
+
+                            <a asp-action="Edit"
+                               asp-route-id="@item.Id"
+                               class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@item.Id"
+                               class="btn btn-danger btn-sm">
+                                Delete
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="10" class="text-center text-danger">
+                        No Companies Found
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

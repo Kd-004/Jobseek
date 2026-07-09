@@ -122,7 +122,7 @@ public class RegisterUserModel : PageModel
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account with password.");
-                await _userManager.AddToRoleAsync(user, "Admin");
+                await _userManager.AddToRoleAsync(user, "User");
 
 
                 var userId = await _userManager.GetUserIdAsync(user);
@@ -144,7 +144,7 @@ public class RegisterUserModel : PageModel
                 else
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
+                    return RedirectToAction("Index", "Dashboard");
                 }
             }
             foreach (var error in result.Errors)
