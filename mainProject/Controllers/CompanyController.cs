@@ -20,6 +20,77 @@ namespace mainProject.Controllers
             return View(await _context.Companies.ToListAsync());
         }
 
+        [HttpGet]
+        public IActionResult Upsert(int? id)
+        {
+            Company company = new Company();
+
+            if (id == null || id == 0)
+            {
+                return View(company);
+            }
+
+            company = _context.Companies.FirstOrDefault(x => x.Id == id);
+
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            return View(company);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Upsert(Company company, IFormFile? logoFile)
+        {
+            if (ModelState.IsValid)
+            {
+                // Upload Logo
+                if (logoFile != null)
+                {
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/company");
+
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(logoFile.FileName);
+
+                    string filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        logoFile.CopyTo(stream);
+                    }
+
+                    company.Logo = fileName;
+                }
+
+                if (company.Id == 0)
+                {
+                    company.CreatedDate = DateTime.Now;
+
+                    _context.Companies.Add(company);
+                }
+                else
+                {
+                    _context.Companies.Update(company);
+                }
+
+                _context.SaveChanges();
+
+                TempData["success"] = "Company saved successfully.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(company);
+        }
+
+       
+
         // GET: Company/Details/5
         public async Task<IActionResult> Details(int? id)
         {

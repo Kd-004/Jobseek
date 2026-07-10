@@ -1,0 +1,123 @@
+﻿@model mainProject.Models.Company
+@{
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>@(Model.Id == 0 ? "Add Company" : "Update Company")</h3>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Upsert" method="post" enctype="multipart/form-data" asp-controller="Company">
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="CompanyName" class="form-label"></label>
+                        <input type="text" asp-for="CompanyName" class="form-control" />
+                        <span asp-validation-for="CompanyName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input type="email" asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Phone" class="form-label"></label>
+                        <input type="text" asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                   
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Company Logo</label>
+                        <input type="file" name="logoFile" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Website" class="form-label"></label>
+                        <input type="url" asp-for="Website" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Industry" class="form-label"></label>
+                        <select asp-for="Industry" class="form-select">
+                            <option value="">Select Industry</option>
+                            <option>Information Technology</option>
+                            <option>Healthcare</option>
+                            <option>Education</option>
+                            <option>Finance</option>
+                            <option>Manufacturing</option>
+                            <option>Retail</option>
+                            <option>Marketing</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="4"></textarea>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Address" class="form-label"></label>
+                        <input type="text" asp-for="Address" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="City" class="form-label"></label>
+                        <input type="text" asp-for="City" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="State" class="form-label"></label>
+                        <input type="text" asp-for="State" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Country" class="form-label"></label>
+                        <input type="text" asp-for="Country" class="form-control" />
+                    </div>
+
+                </div>
+
+                <div class="mt-3">
+
+                    @if (Model.Id == 0)
+                    {
+                        <button type="submit" class="btn btn-success">
+                            Save Company
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-warning">
+                            Update Company
+                        </button>
+                    }
+
+                    <a asp-action="Index" class="btn btn-secondary">
+                        Back to List
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
