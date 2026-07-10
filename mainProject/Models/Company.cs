@@ -7,6 +7,7 @@ namespace mainProject.Models
         [Key]
         public int Id { get; set; }
 
+        public string  UserId { get; set; }
         [Required(ErrorMessage = "Company Name is required")]
         [StringLength(100)]
         public string CompanyName { get; set; }

@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Claims;
 using mainProject.Data;
 using mainProject.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace mainProject.Controllers
 {
@@ -24,7 +25,7 @@ namespace mainProject.Controllers
         public IActionResult Upsert(int? id)
         {
             Company company = new Company();
-
+            company.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (id == null || id == 0)
             {
                 return View(company);
@@ -46,6 +47,8 @@ namespace mainProject.Controllers
         {
             if (ModelState.IsValid)
             {
+
+              
                 // Upload Logo
                 if (logoFile != null)
                 {
