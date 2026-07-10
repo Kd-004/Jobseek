@@ -1,106 +1,33 @@
-﻿@model IEnumerable<mainProject.Models.Company>
-
-@{
-    ViewData["Title"] = "Companies";
+﻿@{
+    Layout = "~/Views/Shared/MyLayout.cshtml";
 }
+@if (Model == null)
+{
+    <div class="alert alert-info">
+        <h4>No Company Found</h4>
+        <p>You haven't created your company profile yet.</p>
 
-<div class="container mt-4">
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Company List</h2>
-
-        <a asp-action="Create" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Add Company
+        <a asp-action="Upsert" class="btn btn-primary">
+            Create Company
         </a>
     </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            <h3>@Model.CompanyName</h3>
+        </div>
 
-    <table class="table table-bordered table-hover table-striped">
+        <div class="card-body">
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Phone:</strong> @Model.Phone</p>
+            <p><strong>Industry:</strong> @Model.Industry</p>
+            <p><strong>City:</strong> @Model.City</p>
 
-        <thead class="table-dark">
-            <tr>
-                <th>Logo</th>
-                <th>Company Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Website</th>
-                <th>Industry</th>
-                <th>City</th>
-                <th>Country</th>
-                <th>Created Date</th>
-                <th width="220">Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            @if (Model != null && Model.Any())
-            {
-                @foreach (var item in Model)
-                {
-                    <tr>
-
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.Logo))
-                            {
-                                <img src="~/uploads/@item.Logo"
-                                     width="60"
-                                     height="60"
-                                     class="rounded-circle" />
-                            }
-                            else
-                            {
-                                <span>No Logo</span>
-                            }
-                        </td>
-
-                        <td>@item.CompanyName</td>
-
-                        <td>@item.Email</td>
-                        <td>@item.Phone</td>
-                        <td>
-                            <a href="@item.Website" target="_blank">
-                                @item.Website
-                            </a>
-                        </td>
-                        <td>@item.Industry</td>
-                        <td>@item.City</td>
-                        <td>@item.Country</td>
-                        <td>@item.CreatedDate.ToString("dd-MM-yyyy")</td>
-
-                        <td>
-                            <a asp-action="Details"
-                               asp-route-id="@item.Id"
-                               class="btn btn-info btn-sm">
-                                Details
-                            </a>
-
-                            <a asp-action="Edit"
-                               asp-route-id="@item.Id"
-                               class="btn btn-warning btn-sm">
-                                Edit
-                            </a>
-
-                            <a asp-action="Delete"
-                               asp-route-id="@item.Id"
-                               class="btn btn-danger btn-sm">
-                                Delete
-                            </a>
-                        </td>
-
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="10" class="text-center text-danger">
-                        No Companies Found
-                    </td>
-                </tr>
-            }
-
-        </tbody>
-
-    </table>
-
-</div>
+            <a asp-action="Upsert" asp-route-id="@Model.Id" class="btn btn-warning">
+                Edit Company
+            </a>
+        </div>
+    </div>
+}

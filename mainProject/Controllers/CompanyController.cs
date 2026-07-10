@@ -15,27 +15,39 @@ namespace mainProject.Controllers
             _context = context;
         }
 
-        // GET: Company
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public IActionResult Index()
         {
-            return View(await _context.Companies.ToListAsync());
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var company = _context.Companies.FirstOrDefault(c => c.UserId == userId);
+
+            if (company == null)
+            {
+                // No company exists for this user, create a new one
+                company = new Company
+                {
+                    UserId = userId
+                };
+            }
+
+            return View(company);
         }
 
         [HttpGet]
         public IActionResult Upsert(int? id)
         {
-            Company company = new Company();
-            company.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (id == null || id == 0)
-            {
-                return View(company);
-            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            company = _context.Companies.FirstOrDefault(x => x.Id == id);
+            var company = _context.Companies.FirstOrDefault(c => c.UserId == userId);
 
             if (company == null)
             {
-                return NotFound();
+                // No company exists for this user, create a new one
+                company = new Company
+                {
+                    UserId = userId
+                };
             }
 
             return View(company);
@@ -45,54 +57,49 @@ namespace mainProject.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(Company company, IFormFile? logoFile)
         {
-            if (ModelState.IsValid)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            company.UserId = userId;
+
+            if (!ModelState.IsValid)
             {
-
-              
-                // Upload Logo
-                if (logoFile != null)
-                {
-                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/company");
-
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(logoFile.FileName);
-
-                    string filePath = Path.Combine(uploadsFolder, fileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        logoFile.CopyTo(stream);
-                    }
-
-                    company.Logo = fileName;
-                }
-
-                if (company.Id == 0)
-                {
-                    company.CreatedDate = DateTime.Now;
-
-                    _context.Companies.Add(company);
-                }
-                else
-                {
-                    _context.Companies.Update(company);
-                }
-
-                _context.SaveChanges();
-
-                TempData["success"] = "Company saved successfully.";
-
-                return RedirectToAction(nameof(Index));
+                return View(company);
             }
 
-            return View(company);
+            var existingCompany = _context.Companies.FirstOrDefault(c => c.UserId == userId);
+
+            if (existingCompany == null)
+            {
+                company.CreatedDate = DateTime.Now;
+                _context.Companies.Add(company);
+            }
+            else
+            {
+                existingCompany.CompanyName = company.CompanyName;
+                existingCompany.Email = company.Email;
+                existingCompany.Phone = company.Phone;
+                existingCompany.Website = company.Website;
+                existingCompany.Industry = company.Industry;
+                existingCompany.Description = company.Description;
+                existingCompany.Address = company.Address;
+                existingCompany.City = company.City;
+                existingCompany.State = company.State;
+                existingCompany.Country = company.Country;
+
+                // Update logo if uploaded
+                if (!string.IsNullOrEmpty(company.Logo))
+                {
+                    existingCompany.Logo = company.Logo;
+                }
+
+                _context.Companies.Update(existingCompany);
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
-       
 
         // GET: Company/Details/5
         public async Task<IActionResult> Details(int? id)
