@@ -24,14 +24,32 @@ namespace mainProject.Controllers
 
             if (company == null)
             {
-                // No company exists for this user, create a new one
-                company = new Company
-                {
-                    UserId = userId
-                };
+                return View();
             }
 
             return View(company);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var company = _context.Companies
+                                  .FirstOrDefault(c => c.Id == id && c.UserId == userId);
+
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            _context.Companies.Remove(company);
+            _context.SaveChanges();
+
+            TempData["success"] = "Company deleted successfully.";
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -184,35 +202,35 @@ namespace mainProject.Controllers
         }
 
         // GET: Company/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-                return NotFound();
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //        return NotFound();
 
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(c => c.Id == id);
+        //    var company = await _context.Companies
+        //        .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (company == null)
-                return NotFound();
+        //    if (company == null)
+        //        return NotFound();
 
-            return View(company);
-        }
+        //    return View(company);
+        //}
 
-        // POST: Company/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var company = await _context.Companies.FindAsync(id);
+        //// POST: Company/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var company = await _context.Companies.FindAsync(id);
 
-            if (company != null)
-            {
-                _context.Companies.Remove(company);
-                await _context.SaveChangesAsync();
-            }
+        //    if (company != null)
+        //    {
+        //        _context.Companies.Remove(company);
+        //        await _context.SaveChangesAsync();
+        //    }
 
-            return RedirectToAction(nameof(Index));
-        }
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool CompanyExists(int id)
         {
