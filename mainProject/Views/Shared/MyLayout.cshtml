@@ -59,7 +59,7 @@
 	<link rel="stylesheet" href="~/assets/css/adminlte.css" />
 </head>
 <body>
-	<div class="app-wrapper">
+	<div class="app-wrapper" >
 		<nav class="app-header navbar navbar-expand bg-body">
 			<!--begin::Container-->
 			<div class="container-fluid">
@@ -385,7 +385,9 @@
 			<!--end::Sidebar Wrapper-->
 		</aside>
 
-		<main role="main" class="pb-3">
+		<main role="main"
+			  class="main-content"
+			  style="min-height:100vh !important;  background: #05070f; !important;">
 			@RenderBody()
 		</main>
 	</div>
