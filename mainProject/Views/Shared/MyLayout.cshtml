@@ -342,7 +342,7 @@
 						<li class="nav-item menu-open">
 							@if (User.IsInRole("Admin"))
 							{
-								<a href="#" class="nav-link active">
+								<a href="/dashboard" class="nav-link active">
 									<i class="nav-icon bi bi-speedometer"></i>
 									<p>
 										Dashboard
@@ -354,6 +354,14 @@
 									<i class="nav-icon bi bi-speedometer"></i>
 									<p>
 										Company Profile
+										<i class="nav-arrow bi bi-chevron-right"></i>
+									</p>
+								</a>
+
+								<a href="/job" class="nav-link active">
+									<i class="nav-icon bi bi-speedometer"></i>
+									<p>
+										Jobs
 										<i class="nav-arrow bi bi-chevron-right"></i>
 									</p>
 								</a>

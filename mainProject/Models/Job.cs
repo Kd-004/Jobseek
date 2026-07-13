@@ -12,10 +12,7 @@ namespace mainProject.Models
 
         [Required]
         public string CompanyId { get; set; }
-
-        [ForeignKey("UserId")]
-        public IdentityUser? User { get; set; }
-
+        
         [Required]
         [StringLength(100)]
         public string JobTitle { get; set; }
