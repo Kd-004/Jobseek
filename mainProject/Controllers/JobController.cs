@@ -1,93 +1,76 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Claims;
 using mainProject.Data;
 using mainProject.Models;
-
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 namespace mainProject.Controllers
 {
     public class JobController : Controller
     {
         private readonly ApplicationDbContext _context;
-
         public JobController(ApplicationDbContext context)
         {
             _context = context;
         }
-
         // GET: Job
         public async Task<IActionResult> Index()
         {
             return View(await _context.Jobs.ToListAsync());
         }
-
         // GET: Job/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
                 return NotFound();
-
             var job = await _context.Jobs.FirstOrDefaultAsync(x => x.JobId == id);
-
             if (job == null)
                 return NotFound();
-
             return View(job);
         }
 
-        // GET: Job/Create
-        public IActionResult Create()
+        // GET: Job/Upsert
+        // GET: Job/Upsert/5
+        public async Task<IActionResult> Upsert(int? id)
         {
-            return View();
-        }
+            await PopulateCompanyList();
 
-        // POST: Job/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Job job)
-        {
-            if (ModelState.IsValid)
+            if (id == null || id == 0)
             {
-                job.PostedDate = DateTime.Now;
-
-                _context.Add(job);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
+                // Insert
+                return View(new Job());
             }
 
-            return View(job);
-        }
-
-        // GET: Job/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-                return NotFound();
-
+            // Update
             var job = await _context.Jobs.FindAsync(id);
-
             if (job == null)
                 return NotFound();
 
             return View(job);
         }
 
-        // POST: Job/Edit/5
+        // POST: Job/Upsert
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Job job)
+        public async Task<IActionResult> Upsert(Job job)
         {
-            if (id != job.JobId)
-                return NotFound();
-
             if (ModelState.IsValid)
             {
-                _context.Update(job);
-                await _context.SaveChangesAsync();
+                if (job.JobId == 0)
+                {
+                    job.PostedDate = DateTime.Now;
+                    _context.Jobs.Add(job);
+                }
+                else
+                {
+                    _context.Jobs.Update(job);
+                }
 
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
+            await PopulateCompanyList();
             return View(job);
         }
 
@@ -96,29 +79,36 @@ namespace mainProject.Controllers
         {
             if (id == null)
                 return NotFound();
-
             var job = await _context.Jobs.FirstOrDefaultAsync(x => x.JobId == id);
-
             if (job == null)
                 return NotFound();
-
             return View(job);
         }
 
-        // POST: Job/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var job = await _context.Jobs.FindAsync(id);
-
             if (job != null)
             {
                 _context.Jobs.Remove(job);
                 await _context.SaveChangesAsync();
             }
-
             return RedirectToAction(nameof(Index));
+        }
+        //userid
+        private async Task PopulateCompanyList()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            ViewBag.CompanyList = new SelectList(
+                await _context.Company
+                    .Where(c => c.UserId == userId)
+                    .ToListAsync(),
+                "Id",
+                "CompanyName"
+            );
         }
     }
 }
