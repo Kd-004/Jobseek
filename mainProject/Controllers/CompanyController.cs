@@ -20,7 +20,7 @@ namespace mainProject.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var company = _context.Companies.FirstOrDefault(c => c.UserId == userId);
+            var company = _context.Company.FirstOrDefault(c => c.UserId == userId);
 
             if (company == null)
             {
@@ -36,7 +36,7 @@ namespace mainProject.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var company = _context.Companies
+            var company = _context.Company
                                   .FirstOrDefault(c => c.Id == id && c.UserId == userId);
 
             if (company == null)
@@ -44,7 +44,7 @@ namespace mainProject.Controllers
                 return NotFound();
             }
 
-            _context.Companies.Remove(company);
+            _context.Company.Remove(company);
             _context.SaveChanges();
 
             TempData["success"] = "Company deleted successfully.";
@@ -57,7 +57,7 @@ namespace mainProject.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var company = _context.Companies.FirstOrDefault(c => c.UserId == userId);
+            var company = _context.Company.FirstOrDefault(c => c.UserId == userId);
 
             if (company == null)
             {
@@ -84,12 +84,12 @@ namespace mainProject.Controllers
                 return View(company);
             }
 
-            var existingCompany = _context.Companies.FirstOrDefault(c => c.UserId == userId);
+            var existingCompany = _context.Company.FirstOrDefault(c => c.UserId == userId);
 
             if (existingCompany == null)
             {
                 company.CreatedDate = DateTime.Now;
-                _context.Companies.Add(company);
+                _context.Company.Add(company);
             }
             else
             {
@@ -110,7 +110,7 @@ namespace mainProject.Controllers
                     existingCompany.Logo = company.Logo;
                 }
 
-                _context.Companies.Update(existingCompany);
+                _context.Company.Update(existingCompany);
             }
 
             _context.SaveChanges();
@@ -125,7 +125,7 @@ namespace mainProject.Controllers
             if (id == null)
                 return NotFound();
 
-            var company = await _context.Companies
+            var company = await _context.Company
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (company == null)
@@ -164,7 +164,7 @@ namespace mainProject.Controllers
             if (id == null)
                 return NotFound();
 
-            var company = await _context.Companies.FindAsync(id);
+            var company = await _context.Company.FindAsync(id);
 
             if (company == null)
                 return NotFound();
@@ -234,7 +234,7 @@ namespace mainProject.Controllers
 
         private bool CompanyExists(int id)
         {
-            return _context.Companies.Any(e => e.Id == id);
+            return _context.Company.Any(e => e.Id == id);
         }
     }
 }

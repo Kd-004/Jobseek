@@ -13,8 +13,7 @@ namespace mainProject.Data
        // public DbSet<Job> Jobs { get; set; }
         public DbSet<Company> Company { get; set; }
         public DbSet<Job> Jobs { get; set; }
-        private readonly ApplicationDbContext _context;
-
+       
        
     }
 }
