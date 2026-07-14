@@ -13,6 +13,8 @@ namespace JobPortal.Models
         [Key]
         public int Id { get; set; }
 
+        public string UserId { get; set; }
+
         [Required(ErrorMessage = "Full name is required")]
         [StringLength(100)]
         [Display(Name = "Full Name")]
