@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using JobPortal.Models;
 using mainProject.Data;
+using mainProject.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,32 +23,44 @@ namespace JobPortal.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: /JobSeeker
-        public async Task<IActionResult> Index()
-        {
-            var jobSeekers = await _db.JobSeekers
-                .OrderByDescending(j => j.CreatedDate)
-                .ToListAsync();
-            return View(jobSeekers);
-        }
+       
 
-        // GET: /JobSeeker/Upsert/5  (null Id = Create, non-null = Edit)
-        public async Task<IActionResult> Upsert(int? id)
+        [HttpGet]
+        public IActionResult Index()
         {
-            if (id == null || id == 0)
-            {
-                // Create
-                return View(new JobSeeker { DateOfBirth = DateTime.Today.AddYears(-20) });
-            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Edit
-            var jobSeeker = await _db.JobSeekers.FindAsync(id);
+            var jobSeeker = _db.JobSeekers.FirstOrDefault(c => c.UserId == userId);
+
             if (jobSeeker == null)
             {
-                return NotFound();
+                return View();
             }
+
             return View(jobSeeker);
         }
+
+
+        [HttpGet]
+        public IActionResult Upsert(int? id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var JobSeeker = _db.JobSeekers.FirstOrDefault(c => c.UserId == userId);
+
+            if (JobSeeker == null)
+            {
+                // No company exists for this user, create a new one
+                JobSeeker = new JobSeeker
+                {
+                    UserId = userId
+                };
+            }
+
+            return View(JobSeeker);
+        }
+
+      
 
         // POST: /JobSeeker/Upsert
         [HttpPost]

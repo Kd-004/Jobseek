@@ -1,525 +1,327 @@
-﻿
+﻿@model JobPortal.Models.JobSeeker
+
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Add Job Seeker" : "Edit Job Seeker";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Upsert" asp-controller="JobSeek" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="UserId" />
+    <input type="hidden" asp-for="ProfileImage" />
+    <input type="hidden" asp-for="ResumeFile" />
+    <input type="hidden" asp-for="CreatedDate" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div>
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="DateOfBirth"></label>
+        <input asp-for="DateOfBirth" type="date" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Gender"></label>
+        <select asp-for="Gender">
+            <option value="">-- Select Gender --</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Address"></label>
+        <input asp-for="Address" />
+    </div>
+
+    <div>
+        <label asp-for="City"></label>
+        <input asp-for="City" />
+    </div>
+
+    <div>
+        <label asp-for="State"></label>
+        <input asp-for="State" />
+    </div>
+
+    <div>
+        <label asp-for="Country"></label>
+        <input asp-for="Country" />
+    </div>
+
+    <div>
+        <label asp-for="ProfileImageFile"></label>
+        <input asp-for="ProfileImageFile" type="file" accept="image/*" />
+        @if (!string.IsNullOrEmpty(Model.ProfileImage))
+        {
+            <div>
+                <img src="@Model.ProfileImage" alt="Profile Image" width="100" />
+            </div>
+        }
+    </div>
+
+    <div>
+        <label asp-for="CareerObjective"></label>
+        <textarea asp-for="CareerObjective" rows="4"></textarea>
+    </div>
+
+    <div>
+        <label asp-for="HighestQualification"></label>
+        <input asp-for="HighestQualification" />
+        <span asp-validation-for="HighestQualification" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Experience"></label>
+        <input asp-for="Experience" type="number" min="0" max="50" />
+        <span asp-validation-for="Experience" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="CurrentSalary"></label>
+        <input asp-for="CurrentSalary" type="number" step="0.01" min="0" />
+        <span asp-validation-for="CurrentSalary" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="ExpectedSalary"></label>
+        <input asp-for="ExpectedSalary" type="number" step="0.01" min="0" />
+        <span asp-validation-for="ExpectedSalary" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Skills"></label>
+        <input asp-for="Skills" placeholder="e.g. C#, ASP.NET, SQL" />
+    </div>
+
+    <div>
+        <label asp-for="ResumeUpload"></label>
+        <input asp-for="ResumeUpload" type="file" accept=".pdf,.doc,.docx" />
+        @if (!string.IsNullOrEmpty(Model.ResumeFile))
+        {
+            <div>
+                <a href="@Model.ResumeFile" target="_blank">View Current Resume</a>
+            </div>
+        }
+    </div>
+
+    <div>
+        <label asp-for="LinkedIn"></label>
+        <input asp-for="LinkedIn" />
+        <span asp-validation-for="LinkedIn" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="GitHub"></label>
+        <input asp-for="GitHub" />
+        <span asp-validation-for="GitHub" class="text-danger"></span>
+    </div>
+
+    <div>
+        <button type="submit">Save</button>
+        <a asp-action="Index">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+
 <style>
-  
-    <link rel="stylesheet" href="~/css/site-theme.css" asp-append-version="true" / >
-    
-
-    :root {
-        --navy-950: #05070f;
-        --navy-900: #0b1330;
-        --navy-800: #101a3d;
-        --blue-500: #3b6dff;
-        --blue-700: #1a3aad;
-        --gold-400: #f5c15c;
-        --gold-600: #e08e2e;
-        --slate-500: #4b5563;
-        --slate-900: #111827;
-        --text-muted-70: rgba(255, 255, 255, 0.65);
-        --text-muted-85: rgba(255, 255, 255, 0.8);
-        --border-soft: rgba(255, 255, 255, 0.08);
-        --border-med: rgba(255, 255, 255, 0.12);
-    }
-
     body {
-        background: var(--navy-950);
+        background: linear-gradient(135deg, #0a0e27 0%, #0d1b2a 50%, #1b263b 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Roboto, sans-serif;
+        color: #e8e4d8;
     }
 
-    /* ============ Ambient glow background ============ */
-    .theme-page {
-        position: relative;
-        overflow: hidden;
-        background: linear-gradient(160deg, var(--navy-950) 0%, var(--navy-900) 45%, var(--navy-800) 85%, var(--navy-900) 100%);
+    h2 {
+        text-align: center;
+        color: #f5d78e;
+        text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        margin: 30px 0;
+        letter-spacing: 1px;
+        font-weight: 600;
     }
 
-    .glow {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(120px);
-        opacity: 0.35;
-        pointer-events: none;
+    form {
+        max-width: 800px;
+        margin: 0 auto 50px auto;
+        padding: 35px;
+        background: rgba(20, 30, 55, 0.45);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(212, 175, 55, 0.25);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(245, 215, 142, 0.08);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 25px;
     }
 
-    .glow-1 {
-        width: 500px;
-        height: 500px;
-        background: var(--blue-500);
-        top: -150px;
-        left: -100px;
+        form div {
+            display: flex;
+            flex-direction: column;
+        }
+
+            /* full width fields */
+            form div:has(textarea),
+            form div:has(> button),
+            form > div:last-of-type {
+                grid-column: 1 / -1;
+            }
+
+    label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #d4af37;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
-    .glow-2 {
-        width: 450px;
-        height: 450px;
-        background: var(--blue-700);
-        bottom: -180px;
-        right: -120px;
-    }
-
-    .glow-gold {
-        background: var(--gold-400);
-        opacity: 0.15;
-    }
-
-    /* ============ Text helpers ============ */
-    .text-light-50 {
-        color: var(--text-muted-70) !important;
-    }
-
-    .text-light-70 {
-        color: var(--text-muted-85) !important;
-    }
-
-    .text-gold {
-        color: var(--gold-400) !important;
-    }
-
-    .stat-number {
-        color: var(--gold-400);
-    }
-
-    /* ============ Eyebrow badge ============ */
-    .eyebrow-badge {
+    input,
+    select,
+    textarea {
         background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        color: #cfd8ff;
-        font-size: 0.85rem;
-        font-weight: 500;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        border-radius: 10px;
+        padding: 11px 14px;
+        color: #f5f2e8;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.25s ease;
         backdrop-filter: blur(6px);
     }
 
-        .eyebrow-badge i {
-            color: #6d8cff;
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(232, 228, 216, 0.4);
         }
 
-    .eyebrow-badge-gold {
-        color: #ffd98a;
-    }
-
-    .eyebrow-badge-accent {
-        color: #d1d5db;
-    }
-
-        .eyebrow-badge-accent i {
-            color: #9ca3af;
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #f5d78e;
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
         }
 
-    /* ============ Glass card system (used everywhere) ============ */
-    .glass-card, .auth-card, .registration-card, .card {
-        border-radius: 1.1rem !important;
-        border: 1px solid var(--border-soft) !important;
-        background: rgba(255, 255, 255, 0.035) !important;
-        backdrop-filter: blur(16px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
-        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-    }
-
-        .glass-card:hover, .registration-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(109, 140, 255, 0.35);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+        select option {
+            background: #0d1b2a;
+            color: #f5f2e8;
         }
 
-    .card-header {
-        background: transparent !important;
-        border-bottom: 1px solid var(--border-soft) !important;
+    textarea {
+        resize: vertical;
+        min-height: 100px;
     }
 
-    .card-footer {
-        background: transparent !important;
-        border-top: 1px solid var(--border-soft) !important;
+    input[type="file"] {
+        padding: 8px;
+        cursor: pointer;
     }
 
-    .card-title {
-        color: #fff !important;
-    }
-
-    .btn-tool {
-        color: var(--text-muted-70) !important;
-    }
-
-        .btn-tool:hover {
-            color: #fff !important;
+        input[type="file"]::file-selector-button {
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            color: #f5d78e;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background 0.2s ease;
         }
 
-    /* ============ Icon circles ============ */
-    .icon-circle {
-        width: 64px;
-        height: 64px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.75rem;
-        margin: auto;
+            input[type="file"]::file-selector-button:hover {
+                background: rgba(212, 175, 55, 0.35);
+            }
+
+    img {
+        margin-top: 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
     }
 
-    .icon-circle-primary {
-        background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
-        color: #fff;
-        box-shadow: 0 0 25px rgba(43, 92, 255, 0.4);
-    }
-
-    .icon-circle-accent {
-        background: linear-gradient(135deg, var(--slate-500), var(--slate-900));
-        color: #fff;
-        box-shadow: 0 0 25px rgba(75, 85, 99, 0.35);
-    }
-
-    .icon-blue {
-        background: linear-gradient(135deg,#3b6dff,#1a3aad);
-        box-shadow: 0 0 20px rgba(59,109,255,.35);
-        color: #fff;
-    }
-
-    .icon-green {
-        background: linear-gradient(135deg,#22c55e,#15803d);
-        box-shadow: 0 0 20px rgba(34,197,94,.3);
-        color: #fff;
-    }
-
-    .icon-gold {
-        background: linear-gradient(135deg,#f5c15c,#e08e2e);
-        box-shadow: 0 0 20px rgba(245,193,92,.3);
-        color: #fff;
-    }
-
-    .icon-red {
-        background: linear-gradient(135deg,#f87171,#b91c1c);
-        box-shadow: 0 0 20px rgba(248,113,113,.3);
-        color: #fff;
-    }
-
-    /* ============ Feature list bullets ============ */
-    .feature-list li {
-        font-size: 0.95rem;
-        color: rgba(255, 255, 255, 0.75);
-        margin-bottom: 0.5rem;
-    }
-
-    .feature-list i {
-        color: #6d8cff;
-    }
-
-    /* ============ Dark form inputs (floating labels + plain) ============ */
-    .dark-input, .search-input, .search-select {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid var(--border-med) !important;
-        color: #fff !important;
-    }
-
-        .dark-input:focus, .search-input:focus, .search-select:focus {
-            background-color: rgba(255, 255, 255, 0.08) !important;
-            border-color: var(--blue-500) !important;
-            box-shadow: 0 0 0 0.2rem rgba(59, 109, 255, 0.25) !important;
-            color: #fff !important;
-        }
-
-        .dark-input::placeholder, .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.45);
-        }
-
-    .form-floating > label {
-        color: rgba(255, 255, 255, 0.55);
-    }
-
-    .form-floating > .dark-input:focus ~ label,
-    .form-floating > .dark-input:not(:placeholder-shown) ~ label {
-        color: #8ba4ff;
-    }
-
-    .dark-input:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0 1000px rgba(20, 28, 60, 0.9) inset !important;
-        -webkit-text-fill-color: #fff !important;
-    }
-
-    .search-select option {
-        background-color: var(--navy-800);
-        color: #fff;
-    }
-
-    .input-group-text-dark {
-        background-color: rgba(255, 255, 255, 0.05);
-        border: 1px solid var(--border-med);
-        border-right: none;
-        color: rgba(255, 255, 255, 0.55);
-    }
-
-    .form-check-input {
-        background-color: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.25);
-    }
-
-        .form-check-input:checked {
-            background-color: var(--blue-500);
-            border-color: var(--blue-500);
-        }
-
-    /* ============ Links ============ */
-    .login-link {
-        color: #8ba4ff;
+    a {
+        color: #e8c766;
         text-decoration: none;
     }
 
-        .login-link:hover {
-            color: #b6c6ff;
+        a:hover {
+            text-decoration: underline;
+            color: #f5d78e;
         }
 
-    /* ============ Buttons ============ */
-    .btn-gradient-primary {
-        background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
-        border: none;
-        color: #fff;
-        font-weight: 600;
-        transition: filter 0.2s ease, transform 0.2s ease;
+    .text-danger {
+        color: #ff8080;
+        font-size: 12px;
+        margin-top: 4px;
     }
 
-        .btn-gradient-primary:hover {
-            filter: brightness(1.15);
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-    .btn-gradient-accent {
-        background: linear-gradient(135deg, var(--slate-500) 0%, var(--slate-900) 100%);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #fff;
-        font-weight: 600;
-        transition: filter 0.2s ease, transform 0.2s ease;
-    }
-
-        .btn-gradient-accent:hover {
-            filter: brightness(1.3);
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-    .btn-gold {
-        background: linear-gradient(135deg, var(--gold-400) 0%, var(--gold-600) 100%);
+    button[type="submit"] {
+        background: linear-gradient(135deg, #b8860b, #d4af37, #f5d78e);
         border: none;
-        color: #1a1200;
+        color: #0d1b2a;
         font-weight: 700;
-        transition: transform 0.2s ease, filter 0.2s ease;
+        padding: 12px 30px;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        margin-right: 12px;
     }
 
-        .btn-gold:hover {
+        button[type="submit"]:hover {
             transform: translateY(-2px);
-            filter: brightness(1.08);
-            color: #1a1200;
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
         }
 
-    .btn-outline-glass, .btn-outline-light-glass {
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: #fff;
-        font-weight: 600;
-        background: transparent;
-        transition: background 0.2s ease, transform 0.2s ease;
-    }
-
-        .btn-outline-glass:hover, .btn-outline-light-glass:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-    /* ============ Badges (job cards, category cards) ============ */
-    .badge-soft-success {
-        background: rgba(34,197,94,.15);
-        color: #4ade80;
-    }
-
-    .badge-soft-light {
-        background: rgba(255,255,255,.08);
-        color: rgba(255,255,255,.75);
-    }
-
-    .badge-soft-info {
-        background: rgba(59,130,246,.15);
-        color: #7cb0ff;
-    }
-
-    /* ============ Divider ("or continue with") ============ */
-    .divider-text {
+    /* buttons/cancel link row */
+    form > div:last-of-type {
         display: flex;
         align-items: center;
-        text-align: center;
-        color: rgba(255, 255, 255, 0.4);
-        font-size: 0.85rem;
+        justify-content: center;
+        margin-top: 10px;
     }
 
-        .divider-text::before, .divider-text::after {
-            content: "";
-            flex: 1;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    @@media (max-width: 700px) {
+        form {
+            grid-template-columns: 1fr;
+            margin: 0 15px 40px 15px;
         }
-
-        .divider-text span {
-            padding: 0 0.75rem;
-        }
-
-    /* ============ CTA banner section ============ */
-    .cta-section {
-        background: linear-gradient(135deg, var(--navy-800), var(--blue-700));
-        position: relative;
-        overflow: hidden;
     }
-
-    /* ============ Small box stat widgets (AdminLTE dashboard) ============ */
-    .small-box {
-        border-radius: 1rem;
-        border: 1px solid var(--border-soft);
-        overflow: hidden;
-        transition: transform .25s ease, box-shadow .25s ease;
-    }
-
-        .small-box:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 15px 35px rgba(0,0,0,.4);
-        }
-
-        .small-box.text-bg-primary {
-            background: linear-gradient(135deg,#3b6dff,#1a3aad) !important;
-        }
-
-        .small-box.text-bg-success {
-            background: linear-gradient(135deg,#22c55e,#15803d) !important;
-        }
-
-        .small-box.text-bg-warning {
-            background: linear-gradient(135deg,#f5c15c,#e08e2e) !important;
-        }
-
-        .small-box.text-bg-danger {
-            background: linear-gradient(135deg,#f87171,#b91c1c) !important;
-        }
-
-        .small-box .small-box-footer {
-            background: rgba(0,0,0,.15) !important;
-        }
-
-    /* ============ Direct chat widget (AdminLTE dashboard) ============ */
-    .direct-chat-text {
-        background: rgba(255,255,255,.06) !important;
-        border-color: rgba(255,255,255,.1) !important;
-        color: rgba(255,255,255,.85) !important;
-    }
-
-    .direct-chat-msg.end .direct-chat-text {
-        background: linear-gradient(135deg,#3b6dff,#1a3aad) !important;
-        color: #fff !important;
-        border-color: transparent !important;
-    }
-
-    .direct-chat-name {
-        color: #fff !important;
-    }
-
-    .direct-chat-timestamp {
-        color: rgba(255,255,255,.45) !important;
-    }
-
-    .direct-chat-contacts {
-        background: var(--navy-900) !important;
-    }
-
-    .contacts-list-name {
-        color: #fff !important;
-    }
-
-    .contacts-list-date {
-        color: rgba(255,255,255,.4) !important;
-    }
-
-    .contacts-list-msg {
-        color: rgba(255,255,255,.55) !important;
-    }
-
-    .direct-chat-messages {
-        background: transparent !important;
-    }
-
-    .bg-primary.bg-gradient {
-        background: linear-gradient(135deg, var(--navy-800), var(--blue-700)) !important;
-    }
-
-    .sparkline-label {
-        color: rgba(255,255,255,.7);
-        font-size: .85rem;
-        margin-top: .25rem;
-    }
-
-    /* ============ Navbar ============ */
-    .navbar-theme {
-        background: linear-gradient(90deg, var(--navy-950), var(--navy-900)) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-        .navbar-theme .navbar-brand {
-            color: var(--gold-400) !important;
-            font-weight: 700;
-            letter-spacing: 0.02em;
-        }
-
-        .navbar-theme .nav-link {
-            color: rgba(255, 255, 255, 0.75) !important;
-            font-weight: 500;
-            position: relative;
-            margin: 0 0.35rem;
-            transition: color 0.2s ease;
-        }
-
-            .navbar-theme .nav-link:hover,
-            .navbar-theme .nav-link.active {
-                color: #fff !important;
-            }
-
-                .navbar-theme .nav-link.active::after {
-                    content: "";
-                    position: absolute;
-                    left: 0.5rem;
-                    right: 0.5rem;
-                    bottom: -4px;
-                    height: 2px;
-                    background: var(--gold-400);
-                    border-radius: 2px;
-                }
-
-        .navbar-theme .navbar-toggler {
-            border-color: rgba(255, 255, 255, 0.25);
-        }
-
-        .navbar-theme .navbar-toggler-icon {
-            filter: invert(1);
-        }
-
-        .navbar-theme .btn-navbar-cta {
-            background: linear-gradient(135deg, var(--gold-400), var(--gold-600));
-            color: #1a1200;
-            font-weight: 600;
-            border: none;
-            padding: 0.4rem 1.1rem;
-            border-radius: 50px;
-            transition: transform 0.2s ease, filter 0.2s ease;
-        }
-
-            .navbar-theme .btn-navbar-cta:hover {
-                transform: translateY(-1px);
-                filter: brightness(1.08);
-                color: #1a1200;
-            }
-
-    /* ============ Footer ============ */
-    .footer-theme {
-        background: var(--navy-950);
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        color: rgba(255, 255, 255, 0.55);
-    }
-
-        .footer-theme a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-        }
-
-            .footer-theme a:hover {
-                color: var(--gold-400);
-            }
 </style>

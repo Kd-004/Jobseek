@@ -1,115 +1,106 @@
-﻿@model IEnumerable<JobPortal.Models.JobSeeker>
+﻿@model JobPortal.Models.JobSeeker
 @{
     Layout = "~/Views/Shared/MyLayout.cshtml";
+    ViewData["Title"] = "Job Seeker Profile";
 }
 
-<div class="container mt-4">
-    <div class="d-flex align-items-center justify-content-between mb-3">
-        <h2 class="text-primary">Job Seekers</h2>
-        <a asp-controller="JobSeek" asp-action="Upsert" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Add New Job Seeker
+@if (Model == null)
+{
+    <div class="alert alert-info">
+        <h4>No Profile Found</h4>
+        <p>You haven't created your job seeker profile yet.</p>
+        <a asp-action="Upsert" class="btn btn-primary">
+            Create Profile
         </a>
     </div>
-
-    @if (TempData["success"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @TempData["success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+}
+else
+{
+    <div class="card">
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <h3>@Model.FullName</h3>
+            <a asp-action="Upsert" asp-route-id="@Model.Id" class="btn btn-warning">
+                Edit Profile
+            </a>
         </div>
-    }
-
-    <div class="card shadow-sm">
         <div class="card-body">
-            <div class="mb-3">
-                <input type="text" id="searchBox" class="form-control" placeholder="Search by name, email, city or skills..." />
+            <div class="row">
+                <div class="col-md-3 text-center mb-3">
+                    @if (!string.IsNullOrEmpty(Model.ProfileImage))
+                    {
+                        <img src="~/@Model.ProfileImage" alt="@Model.FullName" class="rounded-circle" style="width:150px;height:150px;object-fit:cover;" />
+                    }
+                    else
+                    {
+                        <i class="bi bi-person-circle" style="font-size:150px;"></i>
+                    }
+                </div>
+                <div class="col-md-9">
+                    <p><strong>Email:</strong> @Model.Email</p>
+                    <p><strong>Phone:</strong> @Model.Phone</p>
+                    <p><strong>Date of Birth:</strong> @Model.DateOfBirth.ToString("dd MMM yyyy")</p>
+                    <p><strong>Gender:</strong> @Model.Gender</p>
+                    <p><strong>Address:</strong> @Model.Address</p>
+                    <p><strong>City:</strong> @Model.City, @Model.State, @Model.Country</p>
+                </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-hover align-middle" id="jobSeekerTable">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Photo</th>
-                            <th>Full Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>City</th>
-                            <th>Qualification</th>
-                            <th>Experience</th>
-                            <th>Expected Salary</th>
-                            <th>Resume</th>
-                            <th style="width: 140px;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null && Model.Any())
-                        {
-                            foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.ProfileImage))
-                                        {
-                                            <img src="~/@item.ProfileImage" alt="@item.FullName" class="rounded-circle" style="width:45px;height:45px;object-fit:cover;" />
-                                        }
-                                        else
-                                        {
-                                            <i class="bi bi-person-circle" style="font-size:2rem;"></i>
-                                        }
-                                    </td>
-                                    <td>@item.FullName</td>
-                                    <td>@item.Email</td>
-                                    <td>@item.Phone</td>
-                                    <td>@item.City, @item.State</td>
-                                    <td>@item.HighestQualification</td>
-                                    <td>@item.Experience yrs</td>
-                                    <td>@(item.ExpectedSalary.HasValue? item.ExpectedSalary.Value.ToString("C0") : "-")</td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.ResumeFile))
-                                        {
-                                            <a href="~/@item.ResumeFile" target="_blank" class="btn btn-sm btn-outline-secondary">
-                                                <i class="bi bi-file-earmark-text"></i> View
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <span class="text-muted">N/A</span>
-                                        }
-                                    </td>
-                                    <td>
-                                        <a asp-controller="JobSeeker" asp-action="Upsert" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-pencil-square"></i> Edit
-                                        </a>
-                                        <a asp-controller="JobSeeker" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash"></i> Delete
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="10" class="text-center text-muted py-4">No job seekers found.</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+            <hr />
+
+            <p><strong>Career Objective:</strong></p>
+            <p>@Model.CareerObjective</p>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <p><strong>Highest Qualification:</strong> @Model.HighestQualification</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Experience:</strong> @Model.Experience yrs</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Expected Salary:</strong> @(Model.ExpectedSalary.HasValue? Model.ExpectedSalary.Value.ToString("C0") : "-")</p>
+                </div>
             </div>
+
+            <p><strong>Skills:</strong> @Model.Skills</p>
+
+            <p>
+                <strong>Resume:</strong>
+                @if (!string.IsNullOrEmpty(Model.ResumeFile))
+                {
+                    <a href="~/@Model.ResumeFile" target="_blank" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-file-earmark-text"></i> View Resume
+                    </a>
+                }
+                else
+                {
+                    <span class="text-muted">Not uploaded</span>
+                }
+            </p>
+
+            <p>
+                <strong>LinkedIn:</strong>
+                @if (!string.IsNullOrEmpty(Model.LinkedIn))
+                {
+                    <a href="@Model.LinkedIn" target="_blank">@Model.LinkedIn</a>
+                }
+                else
+                {
+                    <span class="text-muted">-</span>
+                }
+            </p>
+
+            <p>
+                <strong>GitHub:</strong>
+                @if (!string.IsNullOrEmpty(Model.GitHub))
+                {
+                    <a href="@Model.GitHub" target="_blank">@Model.GitHub</a>
+                }
+                else
+                {
+                    <span class="text-muted">-</span>
+                }
+            </p>
         </div>
     </div>
-</div>
-
-@section Scripts {
-    <script>
-        // Simple client-side search filter across visible columns
-        document.getElementById('searchBox').addEventListener('keyup', function () {
-            var filter = this.value.toLowerCase();
-            var rows = document.querySelectorAll('#jobSeekerTable tbody tr');
-            rows.forEach(function (row) {
-                var text = row.innerText.toLowerCase();
-                row.style.display = text.indexOf(filter) > -1 ? '' : 'none';
-            });
-        });
-    </script>
 }
