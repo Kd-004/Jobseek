@@ -103,7 +103,7 @@ namespace mainProject.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             ViewBag.CompanyList = new SelectList(
-                await _context.Company
+                await _context.Companies
                     .Where(c => c.UserId == userId)
                     .ToListAsync(),
                 "Id",

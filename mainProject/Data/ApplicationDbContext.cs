@@ -1,4 +1,5 @@
-﻿using mainProject.Models;
+﻿using JobPortal.Models;
+using mainProject.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,9 +12,10 @@ namespace mainProject.Data
         {
         }
        // public DbSet<Job> Jobs { get; set; }
-        public DbSet<Company> Company { get; set; }
+        public DbSet<Company> Companies { get; set; }
         public DbSet<Job> Jobs { get; set; }
-       
-       
+        public DbSet<JobSeeker> JobSeekers { get; set; }
+
+
     }
 }
