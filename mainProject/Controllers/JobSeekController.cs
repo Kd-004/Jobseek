@@ -150,39 +150,27 @@ namespace JobPortal.Controllers
         }
 
         // GET: /JobSeeker/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
+       
 
-            var jobSeeker = await _db.JobSeekers.FindAsync(id);
-            if (jobSeeker == null)
-            {
-                return NotFound();
-            }
-            return View(jobSeeker);
-        }
-
-        // POST: /JobSeeker/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult Delete(int id)
         {
-            var jobSeeker = await _db.JobSeekers.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var jobSeeker = _db.JobSeekers
+                                  .FirstOrDefault(c => c.Id == id && c.UserId == userId);
+
             if (jobSeeker == null)
             {
                 return NotFound();
             }
-
-            string wwwRootPath = _webHostEnvironment.WebRootPath;
-            DeleteFileIfExists(wwwRootPath, jobSeeker.ProfileImage);
-            DeleteFileIfExists(wwwRootPath, jobSeeker.ResumeFile);
 
             _db.JobSeekers.Remove(jobSeeker);
-            await _db.SaveChangesAsync();
-            TempData["success"] = "Job seeker deleted successfully";
+            _db.SaveChanges();
+
+            TempData["success"] = "jobSeeker deleted successfully.";
+
             return RedirectToAction(nameof(Index));
         }
 
