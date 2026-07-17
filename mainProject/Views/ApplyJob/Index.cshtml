@@ -138,12 +138,19 @@
                                         <span>@job.Vacancy open</span>
                                     </div>
 
-                                    <form asp-action="ApplyJob" asp-controller="Job" method="post">
+                                    <a asp-controller="ApplyJob"
+                                       asp-action="Details"
+                                       asp-route-jobId="@job.JobId"
+                                       class="btn btn-gradient-primary w-100">
+                                        Apply Now <i class="bi bi-arrow-right ms-1"></i>
+                                    </a>
+
+                                 @*    <form asp-action="ApplyJob" asp-controller="Job" method="post">
                                         <input type="hidden" name="jobId" value="@job.JobId" />
                                         <button type="submit" class="btn btn-gradient-primary w-100">
                                             Apply Now <i class="bi bi-arrow-right ms-1"></i>
                                         </button>
-                                    </form>
+                                    </form> *@
                                 </div>
 
                             </div>

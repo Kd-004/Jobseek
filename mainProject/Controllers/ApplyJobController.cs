@@ -68,35 +68,38 @@ namespace mainProject.Controllers
         }
 
 
+    
         [HttpGet]
         public async Task<IActionResult> Details(int jobId)
         {
+            var job = await _context.Jobs
+                .Where(j => j.JobId == jobId)
+                .GroupJoin(
+                    _context.Companies,
+                    job => job.CompanyId,
+                    company => company.Id.ToString(),
+                    (job, companies) => new { job, companies }
+                )
+                .SelectMany(
+                    x => x.companies.DefaultIfEmpty(),
+                    (x, company) => new JobWithCompany
+                    {
+                        Job = x.job,
+                        CompanyName = company != null
+                            ? company.CompanyName
+                            : "Company not listed",
 
-      //     //get by jobid
-      //      //var jobsQuery = _context.Jobs
-      //      //  I
-      //      //    .AsQueryable();
+                       
+                    }
+                )
+                .FirstOrDefaultAsync();
 
-           
-      //      var jobs = await jobsQuery
-      //.OrderByDescending(j => j.PostedDate)
-      //.GroupJoin(
-      //    _context.Companies,
-      //    job => job.CompanyId,
-      //    company => company.Id.ToString(),
-      //    (job, companies) => new { job, companies }
-      //)
-      //.SelectMany(
-      //    x => x.companies.DefaultIfEmpty(),
-      //    (x, company) => new JobWithCompany
-      //    {
-      //        Job = x.job,
-      //        CompanyName = company != null
-      //            ? company.CompanyName
-      //            : "Company not listed"
-      //    })
-      //.ToListAsync();
-            return View();
+            if (job == null)
+            {
+                return NotFound();
+            }
+
+            return View(job);
         }
         // POST: /ApplyJob/ApplyJob
         // Records that the logged-in user applied to a specific job

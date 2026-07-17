@@ -1,7 +1,7 @@
-﻿@model mainProject.Models.Company
+﻿@model mainProject.Models.JobWithCompany
 @{
     Layout = "~/Views/Shared/MyLayout.cshtml";
-    ViewData["Title"] = Model.CompanyName;
+    ViewData["Title"] = Model.Job.JobTitle;
 }
 
 <div class="theme-page py-5">
@@ -10,43 +10,33 @@
 
     <div class="container position-relative">
 
-        <!-- Company Header -->
+        <!-- Header -->
         <div class="card glass-card mb-4">
             <div class="card-body p-4 p-md-5">
-                <div class="row align-items-center g-4">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
 
-                    <div class="col-auto">
-                        @if (!string.IsNullOrEmpty(Model.Logo))
-                        {
-                            <img src="@Model.Logo" alt="@Model.CompanyName logo"
-                                 class="rounded-circle border border-2"
-                                 style="width:96px;height:96px;object-fit:cover;border-color: rgba(245,193,92,.35) !important;" />
-                        }
-                        else
-                        {
-                            <div class="icon-circle icon-circle-accent" style="width:96px;height:96px;font-size:2.25rem;">
-                                <i class="bi bi-building"></i>
-                            </div>
-                        }
-                    </div>
+                    <div>
+                        <span class="badge badge-soft-info me-2">@Model.Job.Category</span>
+                        <span class="badge badge-soft-success">@Model.Job.Status</span>
 
-                    <div class="col">
-                        <span class="badge rounded-pill eyebrow-badge px-3 py-2 mb-2">
-                            <i class="bi bi-briefcase me-1"></i>@Model.Industry
-                        </span>
-                        <h1 class="fw-bold text-white mb-1">@Model.CompanyName</h1>
+                        <h2 class="fw-bold text-white mt-3 mb-2">@Model.Job.JobTitle</h2>
+
+                        <p class="text-light-50 mb-1">
+                            <i class="bi bi-building me-1"></i>
+                            <strong class="text-white fw-semibold">Company:</strong> @Model.CompanyName
+                        </p>
+
                         <p class="text-light-50 mb-0">
-                            <i class="bi bi-geo-alt me-1"></i>@Model.City, @Model.State, @Model.Country
+                            <i class="bi bi-geo-alt-fill me-1"></i>
+                            <strong class="text-white fw-semibold">Location:</strong> @Model.Job.Location
                         </p>
                     </div>
 
-                    <div class="col-12 col-md-auto">
-                        @if (!string.IsNullOrEmpty(Model.Website))
-                        {
-                            <a href="@Model.Website" target="_blank" rel="noopener" class="btn btn-outline-glass w-100">
-                                <i class="bi bi-globe me-1"></i> Visit Website
-                            </a>
-                        }
+                    <div class="text-end">
+                        <h3 class="text-gold fw-bold mb-0">
+                            ₹@Model.Job.Salary.ToString("N0")
+                        </h3>
+                        <small class="text-light-50">Annual Salary</small>
                     </div>
 
                 </div>
@@ -55,99 +45,134 @@
 
         <div class="row g-4">
 
-            <!-- Main content -->
+            <!-- Job Description -->
             <div class="col-lg-8">
-
-                <div class="card glass-card mb-4">
+                <div class="card glass-card h-100">
                     <div class="card-header">
-                        <h5 class="fw-bold text-white mb-0">
-                            <i class="bi bi-info-circle me-2"></i>About @Model.CompanyName
+                        <h5 class="mb-0 text-white">
+                            <i class="bi bi-file-earmark-text me-2"></i>Job Description
                         </h5>
                     </div>
                     <div class="card-body p-4">
-                        <p class="text-light-50 mb-0" style="white-space: pre-line;">@Model.Description</p>
+                        <p class="text-light-50 mb-0" style="white-space: pre-line;">@Model.Job.JobDescription</p>
                     </div>
                 </div>
-
-                @if (ViewBag.CompanyJobs != null && ((IEnumerable<mainProject.Models.Job>)ViewBag.CompanyJobs).Any())
-                {
-                    <div class="card glass-card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="fw-bold text-white mb-0">
-                                <i class="bi bi-briefcase-fill me-2"></i>Open Positions
-                            </h5>
-                            <span class="badge badge-soft-info">
-                                @(((IEnumerable<mainProject.Models.Job>)ViewBag.CompanyJobs).Count()) jobs
-                            </span>
-                        </div>
-                        <div class="card-body p-4">
-                            @foreach (var job in (IEnumerable<mainProject.Models.Job>)ViewBag.CompanyJobs)
-                            {
-                                <div class="d-flex justify-content-between align-items-center py-3 border-bottom" style="border-color: rgba(255,255,255,.08) !important;">
-                                    <div>
-                                        <h6 class="text-white fw-semibold mb-1">@job.JobTitle</h6>
-                                        <p class="text-light-50 small mb-0">
-                                            <i class="bi bi-geo-alt me-1"></i>@job.Location
-                                            <span class="mx-2">&middot;</span>
-                                            <i class="bi bi-clock-history me-1"></i>@job.Experience
-                                        </p>
-                                    </div>
-                                    <a asp-controller="ApplyJob" asp-action="Apply" asp-route-jobId="@job.JobId"
-                                       class="btn btn-gradient-primary btn-sm">
-                                        View & Apply
-                                    </a>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="card glass-card text-center">
-                        <div class="card-body p-5">
-                            <i class="bi bi-briefcase display-4 text-light-50"></i>
-                            <p class="text-light-50 mt-3 mb-0">No open positions at this company right now.</p>
-                        </div>
-                    </div>
-                }
-
             </div>
 
-            <!-- Sidebar: contact details -->
+            <!-- Job Overview -->
             <div class="col-lg-4">
                 <div class="card glass-card">
                     <div class="card-header">
-                        <h5 class="fw-bold text-white mb-0">
-                            <i class="bi bi-person-lines-fill me-2"></i>Contact Info
-                        </h5>
+                        <h5 class="mb-0 text-white">Job Overview</h5>
                     </div>
                     <div class="card-body p-4">
 
                         <div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color: rgba(255,255,255,.08) !important;">
-                            <span class="text-light-50 small text-uppercase"><i class="bi bi-envelope me-1"></i>Email</span>
-                            <span class="text-white text-truncate ms-2" style="max-width:150px;" title="@Model.Email">@Model.Email</span>
+                            <span class="text-light-50 small text-uppercase">Employment Type</span>
+                            <span class="text-white text-end">@Model.Job.EmploymentType</span>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color: rgba(255,255,255,.08) !important;">
-                            <span class="text-light-50 small text-uppercase"><i class="bi bi-telephone me-1"></i>Phone</span>
-                            <span class="text-white">@Model.Phone</span>
+                            <span class="text-light-50 small text-uppercase">Experience</span>
+                            <span class="text-white text-end">@Model.Job.Experience</span>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color: rgba(255,255,255,.08) !important;">
-                            <span class="text-light-50 small text-uppercase"><i class="bi bi-building me-1"></i>Industry</span>
-                            <span class="text-white">@Model.Industry</span>
+                            <span class="text-light-50 small text-uppercase">Qualification</span>
+                            <span class="text-white text-end">@Model.Job.Qualification</span>
                         </div>
 
-                        <div class="py-2">
-                            <span class="text-light-50 small text-uppercase d-block mb-1"><i class="bi bi-geo-alt me-1"></i>Address</span>
-                            <span class="text-white">
-                                @Model.Address, @Model.City,<br />@Model.State, @Model.Country
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color: rgba(255,255,255,.08) !important;">
+                            <span class="text-light-50 small text-uppercase">Vacancies</span>
+                            <span class="text-white text-end">@Model.Job.Vacancy</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color: rgba(255,255,255,.08) !important;">
+                            <span class="text-light-50 small text-uppercase">Posted Date</span>
+                            <span class="text-white text-end">@Model.Job.PostedDate.ToString("dd MMM yyyy")</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <span class="text-light-50 small text-uppercase">Last Date to Apply</span>
+                            <span class="fw-bold text-end" style="color:#f87171;">
+                                @Model.Job.LastDateToApply.ToString("dd MMM yyyy")
                             </span>
                         </div>
 
                     </div>
                 </div>
             </div>
+
+        </div>
+
+        <!-- Job Highlights -->
+        <div class="row g-4 mt-1">
+
+            <div class="col-md-3">
+                <div class="card glass-card text-center h-100">
+                    <div class="card-body p-4">
+                        <div class="icon-circle icon-blue mb-3">
+                            <i class="bi bi-briefcase-fill"></i>
+                        </div>
+                        <h6 class="text-white mb-1">Category</h6>
+                        <p class="text-light-50 mb-0">@Model.Job.Category</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card glass-card text-center h-100">
+                    <div class="card-body p-4">
+                        <div class="icon-circle icon-red mb-3">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </div>
+                        <h6 class="text-white mb-1">Location</h6>
+                        <p class="text-light-50 mb-0">@Model.Job.Location</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card glass-card text-center h-100">
+                    <div class="card-body p-4">
+                        <div class="icon-circle icon-green mb-3">
+                            <i class="bi bi-cash-stack"></i>
+                        </div>
+                        <h6 class="text-white mb-1">Salary</h6>
+                        <p class="text-light-50 mb-0">₹@Model.Job.Salary.ToString("N0")</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card glass-card text-center h-100">
+                    <div class="card-body p-4">
+                        <div class="icon-circle icon-gold mb-3">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <h6 class="text-white mb-1">Vacancies</h6>
+                        <p class="text-light-50 mb-0">@Model.Job.Vacancy</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="text-center mt-5">
+
+            <form asp-controller="JobSeek" asp-action="Upsert" method="get">
+                <input type="hidden" name="jobId" value="@Model.Job.JobId" />
+
+                <button type="submit" class="btn btn-gold btn-lg px-5 me-3">
+                    <i class="bi bi-send-fill me-1"></i>
+                    Apply Now
+                </button>
+            </form>>
+
+            <a  asp-controller="ApplyJob" asp-action="Details" class="btn btn-outline-glass btn-lg">
+                <i class="bi bi-arrow-left me-1"></i> Back to Jobs
+            </a>
 
         </div>
 
