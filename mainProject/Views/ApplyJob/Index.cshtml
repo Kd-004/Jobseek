@@ -1,0 +1,167 @@
+﻿@model IEnumerable<mainProject.Models.JobWithCompany>
+@{
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+    ViewData["Title"] = "Browse Jobs";
+}
+
+<div class="theme-page py-5">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2 glow-gold"></div>
+
+    <div class="container position-relative">
+
+        <div class="text-center mb-5">
+            <span class="badge rounded-pill eyebrow-badge px-3 py-2 mb-3">
+                <i class="bi bi-briefcase-fill me-1"></i> Open Positions
+            </span>
+            <h1 class="fw-bold text-white display-6">Find Your Next Opportunity</h1>
+            <p class="text-light-50 fs-5 mb-0">
+                Browse verified openings from trusted companies and apply in minutes.
+            </p>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="card glass-card mb-5">
+            <div class="card-body p-4">
+                <form asp-action="Apply" asp-controller="Job" method="get">
+                    <div class="row g-3 align-items-end">
+
+                        <div class="col-md-4">
+                            <label class="form-label text-light-50 small">Search</label>
+                            <div class="input-group">
+                                <span class="input-group-text input-group-text-dark">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" name="search" class="form-control search-input"
+                                       placeholder="Job title or keyword" value="@Context.Request.Query["search"]" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label text-light-50 small">Category</label>
+                            <select name="category" class="form-select search-select">
+                                <option value="">All Categories</option>
+                                <option>Information Technology</option>
+                                <option>Healthcare</option>
+                                <option>Education</option>
+                                <option>Finance</option>
+                                <option>Manufacturing</option>
+                                <option>Retail</option>
+                                <option>Marketing</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label text-light-50 small">Location</label>
+                            <div class="input-group">
+                                <span class="input-group-text input-group-text-dark">
+                                    <i class="bi bi-geo-alt"></i>
+                                </span>
+                                <input type="text" name="location" class="form-control search-input"
+                                       placeholder="City" value="@Context.Request.Query["location"]" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-gradient-primary w-100">
+                                Filter
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results count -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <p class="text-light-50 mb-0">
+                <span class="text-white fw-semibold">@Model.Count()</span> jobs found
+            </p>
+        </div>
+
+        <!-- Job Cards -->
+        @if (Model.Any())
+        {
+            <div class="row g-4">
+                @foreach (var item in Model)
+                {
+
+                    var job = item.Job;
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card glass-card h-100">
+                            <div class="card-body p-4 d-flex flex-column">
+
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="fw-bold text-white mb-0">@job.JobTitle</h5>
+                                    <span class="badge badge-soft-success">@job.EmploymentType</span>
+                                </div>
+
+                                <p class="text-gold fw-semibold mb-1">
+                                    <i class="bi bi-building me-1"></i>@item.CompanyName
+                                </p>
+
+                                <p class="text-light-50 mb-3">
+                                    <i class="bi bi-geo-alt me-1"></i>@job.Location
+                                </p>
+
+                                <p class="text-light-50 mb-3">
+                                    <i class="bi bi-geo-alt me-1"></i>@job.JobTitle
+                                </p>
+
+
+                                <p class="text-light-50 small mb-3">
+                                    @(job.JobDescription != null && job.JobDescription.Length > 110
+                                                                ? job.JobDescription.Substring(0, 110) + "..."
+                                                                : job.JobDescription)
+                        </p>
+
+                                <div class="mb-3">
+                                    <span class="badge badge-soft-light me-1">
+                                        <i class="bi bi-cash-stack me-1"></i>@job.Salary.ToString("N0")
+                                    </span>
+                                    <span class="badge badge-soft-info me-1">
+                                        <i class="bi bi-clock-history me-1"></i>@job.Experience
+                                    </span>
+                                    <span class="badge badge-soft-light">
+                                        <i class="bi bi-mortarboard me-1"></i>@job.Qualification
+                                    </span>
+                                </div>
+
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center small text-light-50 mb-3">
+                                        <span>
+                                            <i class="bi bi-calendar-x me-1"></i>
+                                            Apply by @job.LastDateToApply.ToString("dd MMM yyyy")
+                                        </span>
+                                        <span>@job.Vacancy open</span>
+                                    </div>
+
+                                    <form asp-action="ApplyJob" asp-controller="Job" method="post">
+                                        <input type="hidden" name="jobId" value="@job.JobId" />
+                                        <button type="submit" class="btn btn-gradient-primary w-100">
+                                            Apply Now <i class="bi bi-arrow-right ms-1"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                        }
+            </div>
+        }
+        else
+        {
+            <div class="card glass-card text-center py-5">
+                <div class="card-body">
+                    <i class="bi bi-search display-3 text-light-50"></i>
+                    <h4 class="text-white mt-3">No jobs found</h4>
+                    <p class="text-light-50">Try adjusting your search filters.</p>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

@@ -55,4 +55,10 @@ namespace mainProject.Models
         [Required]
         public string Status { get; set; } = "Open";
     }
+
+    public class JobWithCompany
+    {
+        public Job Job { get; set; }
+        public string CompanyName { get; set; }
+    }
 }

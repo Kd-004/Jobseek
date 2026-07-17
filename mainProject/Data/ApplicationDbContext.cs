@@ -15,7 +15,7 @@ namespace mainProject.Data
         public DbSet<Company> Companies { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<JobSeeker> JobSeekers { get; set; }
-
+       // public DbSet<JobApplication> JobApplications { get; set; }
 
     }
 }

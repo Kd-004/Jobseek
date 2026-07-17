@@ -1,33 +1,77 @@
 ﻿@{
     Layout = "~/Views/Shared/MyLayout.cshtml";
+    ViewData["Title"] = "Company Profile";
 }
-@if (Model == null)
-{
-    <div class="alert alert-info">
-        <h4>No Company Found</h4>
-        <p>You haven't created your company profile yet.</p>
 
-        <a asp-action="Upsert" class="btn btn-primary">
-            Create Company
-        </a>
-    </div>
-}
-else
-{
-    <div class="card">
-        <div class="card-header">
-            <h3>@Model.CompanyName</h3>
+<div class="theme-page py-5">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2 glow-gold"></div>
+
+    <div class="container position-relative">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+
+                @if (Model == null)
+                {
+                    <div class="card glass-card text-center">
+                        <div class="card-body p-5">
+                            <div class="icon-circle icon-circle-accent mb-4">
+                                <i class="bi bi-building-add"></i>
+                            </div>
+                            <h4 class="fw-bold text-white mb-2">No Company Found</h4>
+                            <p class="text-light-50 mb-4">
+                                You haven't created your company profile yet. Set it up to
+                                start posting jobs and hiring candidates.
+                            </p>
+                            <a asp-action="Upsert" class="btn btn-gradient-primary btn-lg px-4">
+                                <i class="bi bi-plus-circle me-1"></i> Create Company
+                            </a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center mb-4">
+                        <span class="badge rounded-pill eyebrow-badge px-3 py-2 mb-3">
+                            <i class="bi bi-building me-1"></i> Company Profile
+                        </span>
+                    </div>
+
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <h3 class="fw-bold text-white mb-0">@Model.CompanyName</h3>
+                        </div>
+                        <div class="card-body p-4">
+
+                            <div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color: rgba(255,255,255,.08) !important;">
+                                <span class="text-light-50 small text-uppercase"><i class="bi bi-envelope me-1"></i>Email</span>
+                                <span class="text-white">@Model.Email</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color: rgba(255,255,255,.08) !important;">
+                                <span class="text-light-50 small text-uppercase"><i class="bi bi-telephone me-1"></i>Phone</span>
+                                <span class="text-white">@Model.Phone</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color: rgba(255,255,255,.08) !important;">
+                                <span class="text-light-50 small text-uppercase"><i class="bi bi-briefcase me-1"></i>Industry</span>
+                                <span class="text-white">@Model.Industry</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center py-2">
+                                <span class="text-light-50 small text-uppercase"><i class="bi bi-geo-alt me-1"></i>City</span>
+                                <span class="text-white">@Model.City</span>
+                            </div>
+
+                            <a asp-action="Upsert" asp-route-id="@Model.Id" class="btn btn-gold w-100 mt-4">
+                                <i class="bi bi-pencil-square me-1"></i> Edit Company
+                            </a>
+
+                        </div>
+                    </div>
+                }
+
+            </div>
         </div>
-
-        <div class="card-body">
-            <p><strong>Email:</strong> @Model.Email</p>
-            <p><strong>Phone:</strong> @Model.Phone</p>
-            <p><strong>Industry:</strong> @Model.Industry</p>
-            <p><strong>City:</strong> @Model.City</p>
-
-            <a asp-action="Upsert" asp-route-id="@Model.Id" class="btn btn-warning">
-                Edit Company
-            </a>
-        </div>
     </div>
-}
+</div>

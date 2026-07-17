@@ -1,0 +1,141 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using mainProject.Data;
+using mainProject.Models;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace mainProject.Controllers
+{
+    public class ApplyJobController : Controller
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public ApplyJobController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        {
+            _context = context;
+            _userManager = userManager;
+        }
+
+        // GET: /ApplyJob or /ApplyJob/Apply
+        // Shows all open jobs, with optional search/category/location filters
+      
+        [HttpGet]
+        public async Task<IActionResult> Index(string search, string category, string location)
+        {
+            var jobsQuery = _context.Jobs
+                .Where(j => j.Status == "Open")
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                jobsQuery = jobsQuery.Where(j =>
+                    j.JobTitle.Contains(search) ||
+                    j.JobDescription.Contains(search));
+            }
+
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                jobsQuery = jobsQuery.Where(j => j.Category == category);
+            }
+
+            if (!string.IsNullOrWhiteSpace(location))
+            {
+                jobsQuery = jobsQuery.Where(j => j.Location.Contains(location));
+            }
+            var jobs = await jobsQuery
+      .OrderByDescending(j => j.PostedDate)
+      .GroupJoin(
+          _context.Companies,
+          job => job.CompanyId,
+          company => company.Id.ToString(),
+          (job, companies) => new { job, companies }
+      )
+      .SelectMany(
+          x => x.companies.DefaultIfEmpty(),
+          (x, company) => new JobWithCompany
+          {
+              Job = x.job,
+              CompanyName = company != null
+                  ? company.CompanyName
+                  : "Company not listed"
+          })
+      .ToListAsync();
+            return View(jobs);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int jobId)
+        {
+
+      //     //get by jobid
+      //      //var jobsQuery = _context.Jobs
+      //      //  I
+      //      //    .AsQueryable();
+
+           
+      //      var jobs = await jobsQuery
+      //.OrderByDescending(j => j.PostedDate)
+      //.GroupJoin(
+      //    _context.Companies,
+      //    job => job.CompanyId,
+      //    company => company.Id.ToString(),
+      //    (job, companies) => new { job, companies }
+      //)
+      //.SelectMany(
+      //    x => x.companies.DefaultIfEmpty(),
+      //    (x, company) => new JobWithCompany
+      //    {
+      //        Job = x.job,
+      //        CompanyName = company != null
+      //            ? company.CompanyName
+      //            : "Company not listed"
+      //    })
+      //.ToListAsync();
+            return View();
+        }
+        // POST: /ApplyJob/ApplyJob
+        // Records that the logged-in user applied to a specific job
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Authorize]
+        //public async Task<IActionResult> ApplyJob(int jobId)
+        //{
+        //    var job = await _context.Jobs.FindAsync(jobId);
+        //    if (job == null)
+        //    {
+        //        TempData["Error"] = "This job no longer exists.";
+        //        return RedirectToAction(nameof(Apply));
+        //    }
+
+        //    var userId = _userManager.GetUserId(User);
+
+        //    bool alreadyApplied = await _context.JobApplications
+        //        .AnyAsync(a => a.JobId == jobId && a.UserId == userId);
+
+        //    if (alreadyApplied)
+        //    {
+        //        TempData["Error"] = "You have already applied to this job.";
+        //        return RedirectToAction(nameof(Apply));
+        //    }
+
+        //    var application = new JobApplication
+        //    {
+        //        JobId = jobId,
+        //        UserId = userId,
+        //        AppliedDate = System.DateTime.Now,
+        //        Status = "Applied"
+        //    };
+
+        //    _context.JobApplications.Add(application);
+        //    await _context.SaveChangesAsync();
+
+        //    TempData["Success"] = $"You have successfully applied for {job.JobTitle}.";
+        //    return RedirectToAction(nameof(Apply));
+        //}
+    }
+}
