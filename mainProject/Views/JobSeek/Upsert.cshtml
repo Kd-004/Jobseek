@@ -40,11 +40,14 @@
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
 
-    <div>
-        <label asp-for="DateOfBirth"></label>
-        <input asp-for="DateOfBirth" type="date" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" />
-        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-    </div>
+   <div>
+    <label asp-for="DateOfBirth" class="form-label text-light-50"></label>
+    <input type="date" asp-for="DateOfBirth" class="form-control dark-input"
+           min="1980-01-01"
+           max="@DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")"
+           value="@(Model.DateOfBirth != default ? Model.DateOfBirth.ToString("yyyy-MM-dd") : "")" />
+    <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+</div>
 
     <div>
         <label asp-for="Gender"></label>
@@ -107,13 +110,13 @@
 
     <div>
         <label asp-for="CurrentSalary"></label>
-        <input asp-for="CurrentSalary" type="number" step="0.01" min="0" />
+        <input asp-for="CurrentSalary" type="number" step="1000" min="8000" />
         <span asp-validation-for="CurrentSalary" class="text-danger"></span>
     </div>
 
     <div>
         <label asp-for="ExpectedSalary"></label>
-        <input asp-for="ExpectedSalary" type="number" step="0.01" min="0" />
+        <input asp-for="ExpectedSalary" type="number" step="1000" min="10000" />
         <span asp-validation-for="ExpectedSalary" class="text-danger"></span>
     </div>
 

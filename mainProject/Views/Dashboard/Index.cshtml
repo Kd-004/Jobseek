@@ -1,107 +1,211 @@
-﻿@{
-    Layout = "~/Views/Shared/MyLayout.cshtml";
-    ViewData["Title"] = "Employer Dashboard";
-}
-
-<style>
-    .app-main {
-        height: 100vh !important;
-    }
-</style>
-
-<!--begin::App Main-->
-<main class="app-main">
-
-    <!--begin::App Content Header-->
-    <div class="app-content-header">
-        <div class="container-fluid">
-            <div class="row align-items-center">
-                <div class="col-sm-6">
-                    <h3 class="mb-0">Employer Dashboard</h3>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-end">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                    </ol>
-                </div>
+﻿<!--begin::App Content Header-->
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-sm-6">
+                <h3 class="mb-0 fw-bold">Welcome back, @(ViewBag.CompanyName ?? "Employer")</h3>
+                <p class="text-light-50 mb-0 small">Here's what's happening with your job postings today.</p>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                </ol>
             </div>
         </div>
     </div>
-    <!--end::App Content Header-->
-    <!--begin::App Content-->
-    <div class="app-content">
-        <div class="container-fluid">
+</div>
+<!--end::App Content Header-->
+<!--begin::App Content-->
+<div class="app-content">
+    <div class="container-fluid">
 
-            <!--begin::Row - Stat Widgets-->
-            <div class="row g-4">
-                <div class="col-lg-3 col-6">
-                    <div class="small-box text-bg-primary">
-                        <div class="inner">
-                            <h3>180</h3>
-                            <p>Active Job Postings</p>
-                        </div>
-                        <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"></path>
-                        </svg>
-                        <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                            View postings <i class="bi bi-link-45deg"></i>
-                        </a>
+        <!--begin::Row - Stat Widgets-->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-card-body">
+                        <h3>@(ViewBag.ActiveJobs ?? 0)</h3>
+                        <p>Active Job Postings</p>
+                        <i class="bi bi-briefcase-fill stat-card-icon"></i>
                     </div>
+                    <a asp-controller="Job" asp-action="Index" class="stat-card-footer">
+                        View postings <i class="bi bi-link-45deg"></i>
+                    </a>
                 </div>
+            </div>
 
-                <div class="col-lg-3 col-6">
-                    <div class="small-box text-bg-success">
-                        <div class="inner">
-                            <h3>312</h3>
-                            <p>New Applications</p>
-                        </div>
-                        <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z"></path>
-                        </svg>
-                        <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                            Review applicants <i class="bi bi-link-45deg"></i>
-                        </a>
+            <div class="col-lg-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-card-body">
+                        <h3>@(ViewBag.TotalApplications ?? 0)</h3>
+                        <p>Total Applications</p>
+                        <i class="bi bi-file-earmark-text-fill stat-card-icon"></i>
                     </div>
+                    <a asp-controller="Applications" asp-action="Index" class="stat-card-footer">
+                        Review applicants <i class="bi bi-link-45deg"></i>
+                    </a>
                 </div>
+            </div>
 
-                <div class="col-lg-3 col-6">
-                    <div class="small-box text-bg-warning">
-                        <div class="inner">
-                            <h3>58</h3>
-                            <p>Candidate Messages</p>
-                        </div>
-                        <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"></path>
-                        </svg>
-                        <a href="#" class="small-box-footer link-dark link-underline-opacity-0 link-underline-opacity-50-hover">
-                            Open inbox <i class="bi bi-link-45deg"></i>
-                        </a>
+            <div class="col-lg-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-card-body">
+                        <h3>@(ViewBag.Shortlisted ?? 0)</h3>
+                        <p>Shortlisted Candidates</p>
+                        <i class="bi bi-person-check-fill stat-card-icon"></i>
                     </div>
+                    <a asp-controller="Applications" asp-action="Shortlisted" class="stat-card-footer">
+                        View shortlist <i class="bi bi-link-45deg"></i>
+                    </a>
                 </div>
+            </div>
 
-                <div class="col-lg-3 col-6">
-                    <div class="small-box text-bg-danger">
-                        <div class="inner">
-                            <h3>34</h3>
-                            <p>Interviews Scheduled</p>
-                        </div>
-                        <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <path clip-rule="evenodd" fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z"></path>
-                            <path clip-rule="evenodd" fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z"></path>
-                        </svg>
-                        <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                            View calendar <i class="bi bi-link-45deg"></i>
+            <div class="col-lg-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-card-body">
+                        <h3>@(ViewBag.InterviewsScheduled ?? 0)</h3>
+                        <p>Interviews Scheduled</p>
+                        <i class="bi bi-calendar-check-fill stat-card-icon"></i>
+                    </div>
+                    <a asp-controller="Interviews" asp-action="Index" class="stat-card-footer">
+                        View calendar <i class="bi bi-link-45deg"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!--end::Row - Stat Widgets-->
+        <!--begin::Quick Actions-->
+        <div class="card glass-card mb-4">
+            <div class="card-body py-3 px-4">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <span class="text-light-50 small text-uppercase fw-semibold">Quick Actions</span>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a asp-controller="Job" asp-action="Upsert" class="btn btn-gradient-primary btn-sm">
+                            <i class="bi bi-plus-circle me-1"></i> Post a New Job
+                        </a>
+                        <a asp-controller="Company" asp-action="Index" class="btn btn-outline-glass btn-sm">
+                            <i class="bi bi-building me-1"></i> Company Profile
+                        </a>
+                        <a asp-controller="Applications" asp-action="Index" class="btn btn-outline-glass btn-sm">
+                            <i class="bi bi-people me-1"></i> All Applicants
                         </a>
                     </div>
                 </div>
             </div>
-            <!--end::Row - Stat Widgets-->
+        </div>
+        <!--end::Quick Actions-->
+
+        <div class="row g-4">
+
+            <!-- Recent Job Postings -->
+            <div class="col-lg-7">
+                <div class="card glass-card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title">
+                            <i class="bi bi-briefcase me-2"></i>Recent Job Postings
+                        </h3>
+                        <a asp-controller="Job" asp-action="Index" class="btn btn-tool small">
+                            View All <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-borderless align-middle mb-0">
+                                <tbody>
+                                    @if (ViewBag.RecentJobs != null)
+                                    {
+                                        @foreach (var job in (IEnumerable<mainProject.Models.Job>)ViewBag.RecentJobs)
+                                        {
+                                            <tr>
+                                                <td class="ps-4">
+                                                    <h6 class="text-white mb-1">@job.JobTitle</h6>
+                                                    <span class="text-light-50 small">
+                                                        <i class="bi bi-geo-alt me-1"></i>@job.Location
+                                                        <span class="mx-2">&middot;</span>
+                                                        @job.EmploymentType
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    @if (job.Status == "Open")
+                                                    {
+                                                        <span class="badge badge-soft-success">Open</span>
+                                                    }
+                                                    else if (job.Status == "On Hold")
+                                                    {
+                                                        <span class="badge bg-warning text-dark">On Hold</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge badge-soft-light">Closed</span>
+                                                    }
+                                                </td>
+                                                <td class="text-end pe-4">
+                                                    <a asp-controller="Job" asp-action="Upsert" asp-route-id="@job.JobId" class="btn btn-tool">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td class="text-center text-light-50 py-5">
+                                                <i class="bi bi-inbox display-6 d-block mb-2 opacity-50"></i>
+                                                No job postings yet.
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Recent Job Postings -->
+            <!-- Recent Applicants -->
+            <div class="col-lg-5">
+                <div class="card glass-card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title">
+                            <i class="bi bi-people me-2"></i>Recent Applicants
+                        </h3>
+                        <span class="badge badge-soft-info">@(ViewBag.NewApplicantsCount ?? 0) new</span>
+                    </div>
+                    <div class="card-body p-4">
+                        @if (ViewBag.RecentApplicants != null)
+                        {
+                            @foreach (var app in (IEnumerable<dynamic>)ViewBag.RecentApplicants)
+                            {
+                                <div class="d-flex align-items-center py-3 border-bottom" style="border-color: rgba(255,255,255,.08) !important;">
+                                    <div class="icon-circle icon-blue me-3" style="width:44px;height:44px;font-size:1.1rem;">
+                                        @app.CandidateInitials
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="text-white mb-0">@app.CandidateName</h6>
+                                        <span class="text-light-50 small">Applied for @app.JobTitle</span>
+                                    </div>
+                                    <a href="#" class="btn btn-tool">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center text-light-50 py-5">
+                                <i class="bi bi-person-x display-6 d-block mb-2 opacity-50"></i>
+                                No applicants yet.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- /Recent Applicants -->
 
         </div>
-        <!--end::container-fluid-->
-    </div>
-    <!--end::App Content-->
 
-</main>
-<!--end::App Main-->
+    </div>
+</div>
+<!--end::App Content-->

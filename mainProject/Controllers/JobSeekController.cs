@@ -23,8 +23,6 @@ namespace JobPortal.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-       
-
         [HttpGet]
         public IActionResult Index()
         {
@@ -40,29 +38,26 @@ namespace JobPortal.Controllers
             return View(jobSeeker);
         }
 
-
         [HttpGet]
         public IActionResult Upsert(int? id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var JobSeeker = _db.JobSeekers.FirstOrDefault(c => c.UserId == userId);
+            var jobSeeker = _db.JobSeekers.FirstOrDefault(c => c.UserId == userId);
 
-            if (JobSeeker == null)
+            if (jobSeeker == null)
             {
-                // No company exists for this user, create a new one
-                JobSeeker = new JobSeeker
+                // No profile exists for this user yet, create a new one
+                jobSeeker = new JobSeeker
                 {
                     UserId = userId
                 };
             }
 
-            return View(JobSeeker);
+            return View(jobSeeker);
         }
 
-      
-
-        // POST: /JobSeeker/Upsert
+        // POST: /JobSeek/Upsert
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upsert(JobSeeker jobSeeker)
@@ -74,6 +69,18 @@ namespace JobPortal.Controllers
 
             string wwwRootPath = _webHostEnvironment.WebRootPath;
 
+            // Fetch the tracked entity FIRST (for edits) so file-preservation
+            // logic and the final save both work against the same tracked instance.
+            JobSeeker existing = null;
+            if (jobSeeker.Id != 0)
+            {
+                existing = await _db.JobSeekers.FirstOrDefaultAsync(j => j.Id == jobSeeker.Id);
+                if (existing == null)
+                {
+                    return NotFound();
+                }
+            }
+
             // Handle profile image upload
             if (jobSeeker.ProfileImageFile != null)
             {
@@ -83,9 +90,9 @@ namespace JobPortal.Controllers
                 string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(jobSeeker.ProfileImageFile.FileName);
 
                 // Delete old image on edit
-                if (jobSeeker.Id != 0 && !string.IsNullOrEmpty(jobSeeker.ProfileImage))
+                if (existing != null && !string.IsNullOrEmpty(existing.ProfileImage))
                 {
-                    DeleteFileIfExists(wwwRootPath, jobSeeker.ProfileImage);
+                    DeleteFileIfExists(wwwRootPath, existing.ProfileImage);
                 }
 
                 using (var stream = new FileStream(Path.Combine(imagesFolder, newFileName), FileMode.Create))
@@ -93,6 +100,11 @@ namespace JobPortal.Controllers
                     await jobSeeker.ProfileImageFile.CopyToAsync(stream);
                 }
                 jobSeeker.ProfileImage = Path.Combine("uploads", "profile-images", newFileName).Replace("\\", "/");
+            }
+            else if (existing != null)
+            {
+                // No new file chosen — keep whatever was already stored
+                jobSeeker.ProfileImage = existing.ProfileImage;
             }
 
             // Handle resume upload
@@ -104,9 +116,9 @@ namespace JobPortal.Controllers
                 string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(jobSeeker.ResumeUpload.FileName);
 
                 // Delete old resume on edit
-                if (jobSeeker.Id != 0 && !string.IsNullOrEmpty(jobSeeker.ResumeFile))
+                if (existing != null && !string.IsNullOrEmpty(existing.ResumeFile))
                 {
-                    DeleteFileIfExists(wwwRootPath, jobSeeker.ResumeFile);
+                    DeleteFileIfExists(wwwRootPath, existing.ResumeFile);
                 }
 
                 using (var stream = new FileStream(Path.Combine(resumeFolder, newFileName), FileMode.Create))
@@ -115,42 +127,34 @@ namespace JobPortal.Controllers
                 }
                 jobSeeker.ResumeFile = Path.Combine("uploads", "resumes", newFileName).Replace("\\", "/");
             }
-
-            if (jobSeeker.Id == 0)
+            else if (existing != null)
             {
+                // No new file chosen — keep whatever was already stored
+                jobSeeker.ResumeFile = existing.ResumeFile;
+            }
+
+            if (existing == null)
+            {
+                // CREATE
                 jobSeeker.CreatedDate = DateTime.Now;
                 _db.JobSeekers.Add(jobSeeker);
                 TempData["success"] = "Job seeker created successfully";
             }
             else
             {
-                var existing = await _db.JobSeekers.FirstOrDefaultAsync(j => j.Id == jobSeeker.Id);
-                if (existing == null)
-                {
-                    return NotFound();
-                }
-
-                // Preserve stored file paths if no new file was uploaded
-                if (jobSeeker.ProfileImageFile == null)
-                {
-                    jobSeeker.ProfileImage = existing.ProfileImage;
-                }
-                if (jobSeeker.ResumeUpload == null)
-                {
-                    jobSeeker.ResumeFile = existing.ResumeFile;
-                }
+                // UPDATE — copy values onto the ALREADY-TRACKED entity instead of
+                // calling Update(jobSeeker), which would try to track a second
+                // object with the same Id and throw the InvalidOperationException
+                // you hit ("cannot be tracked because another instance ... is
+                // already being tracked").
                 jobSeeker.CreatedDate = existing.CreatedDate;
-
-                _db.JobSeekers.Update(jobSeeker);
+                _db.Entry(existing).CurrentValues.SetValues(jobSeeker);
                 TempData["success"] = "Job seeker updated successfully";
             }
 
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        // GET: /JobSeeker/Delete/5
-       
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -166,10 +170,13 @@ namespace JobPortal.Controllers
                 return NotFound();
             }
 
+            DeleteFileIfExists(_webHostEnvironment.WebRootPath, jobSeeker.ProfileImage);
+            DeleteFileIfExists(_webHostEnvironment.WebRootPath, jobSeeker.ResumeFile);
+
             _db.JobSeekers.Remove(jobSeeker);
             _db.SaveChanges();
 
-            TempData["success"] = "jobSeeker deleted successfully.";
+            TempData["success"] = "Job seeker deleted successfully.";
 
             return RedirectToAction(nameof(Index));
         }

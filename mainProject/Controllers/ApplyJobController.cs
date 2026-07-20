@@ -101,44 +101,55 @@ namespace mainProject.Controllers
 
             return View(job);
         }
-        // POST: /ApplyJob/ApplyJob
-        // Records that the logged-in user applied to a specific job
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //[Authorize]
-        //public async Task<IActionResult> ApplyJob(int jobId)
-        //{
-        //    var job = await _context.Jobs.FindAsync(jobId);
-        //    if (job == null)
-        //    {
-        //        TempData["Error"] = "This job no longer exists.";
-        //        return RedirectToAction(nameof(Apply));
-        //    }
 
-        //    var userId = _userManager.GetUserId(User);
+        [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // [Authorize]
+        public async Task<IActionResult> JobApply(int jobId)
+        {
+            var job = await _context.Jobs.FindAsync(jobId);
+            if (job == null)
+            {
+                TempData["Error"] = "This job no longer exists.";
+                return RedirectToAction(nameof(Details));
+            }
 
-        //    bool alreadyApplied = await _context.JobApplications
-        //        .AnyAsync(a => a.JobId == jobId && a.UserId == userId);
+            // Get logged-in Identity user id
+            var userId = _userManager.GetUserId(User);
 
-        //    if (alreadyApplied)
-        //    {
-        //        TempData["Error"] = "You have already applied to this job.";
-        //        return RedirectToAction(nameof(Apply));
-        //    }
+            // Get corresponding JobSeeker
+            var jobSeeker = await _context.JobSeekers
+                .FirstOrDefaultAsync(js => js.UserId == userId);
 
-        //    var application = new JobApplication
-        //    {
-        //        JobId = jobId,
-        //        UserId = userId,
-        //        AppliedDate = System.DateTime.Now,
-        //        Status = "Applied"
-        //    };
+            if (jobSeeker == null)
+            {
+                TempData["Error"] = "Job seeker profile not found.";
+                return RedirectToAction(nameof(Details));
+            }
 
-        //    _context.JobApplications.Add(application);
-        //    await _context.SaveChangesAsync();
+            bool alreadyApplied = await _context.JobApplications
+                .AnyAsync(a => a.JobId == jobId && a.JobSeekerId == jobSeeker.Id);
 
-        //    TempData["Success"] = $"You have successfully applied for {job.JobTitle}.";
-        //    return RedirectToAction(nameof(Apply));
-        //}
+            if (alreadyApplied)
+            {
+                TempData["Error"] = "You have already applied to this job.";
+                return RedirectToAction(nameof(Details), new { jobId = jobId });
+            }
+
+            var application = new JobApplication
+            {
+                JobId = jobId,
+                CompanyId = Convert.ToInt32(job.CompanyId),
+                JobSeekerId = jobSeeker.Id,
+                AppliedDate = DateTime.Now,
+                Status = "Applied"
+            };
+
+            _context.JobApplications.Add(application);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = $"You have successfully applied for {job.JobTitle}.";
+            return RedirectToAction(nameof(Details), new { jobId = jobId });
+        }
     }
 }

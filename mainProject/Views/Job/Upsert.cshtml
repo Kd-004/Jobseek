@@ -1,151 +1,168 @@
 ﻿@model mainProject.Models.Job
 @{
     Layout = "~/Views/Shared/MyLayout.cshtml";
+    ViewData["Title"] = @Model.JobId == 0 ? "Add Job" : "Update Job";
 }
 
-<div class="container mt-4">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h3>@(Model.JobId == 0 ? "Add Job" : "Update Job")</h3>
-        </div>
+<div class="theme-page py-5">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2 glow-gold"></div>
 
-        <div class="card-body">
+    <div class="container position-relative">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
 
-            <form asp-action="Upsert" method="post" asp-controller="Job">
-
-                <input type="hidden" asp-for="JobId" />
-                <input type="hidden" asp-for="PostedDate" />
-
-                <div class="row">
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="CompanyId" class="form-label"></label>
-                        <select asp-for="CompanyId" class="form-select" asp-items="ViewBag.CompanyList">
-                            <option value="">Select Company</option>
-                        </select>
-                        <span asp-validation-for="CompanyId" class="text-danger"></span>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="JobTitle" class="form-label"></label>
-                        <input type="text" asp-for="JobTitle" class="form-control" />
-                        <span asp-validation-for="JobTitle" class="text-danger"></span>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Category" class="form-label"></label>
-                        <select asp-for="Category" class="form-select">
-                            <option value="">Select Category</option>
-                            <option>Information Technology</option>
-                            <option>Healthcare</option>
-                            <option>Education</option>
-                            <option>Finance</option>
-                            <option>Manufacturing</option>
-                            <option>Retail</option>
-                            <option>Marketing</option>
-                            <option>Other</option>
-                        </select>
-                        <span asp-validation-for="Category" class="text-danger"></span>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Location" class="form-label"></label>
-                        <input type="text" asp-for="Location" class="form-control" />
-                        <span asp-validation-for="Location" class="text-danger"></span>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="EmploymentType" class="form-label"></label>
-                        <select asp-for="EmploymentType" class="form-select">
-                            <option value="">Select Employment Type</option>
-                            <option>Full-Time</option>
-                            <option>Part-Time</option>
-                            <option>Contract</option>
-                            <option>Internship</option>
-                            <option>Remote</option>
-                        </select>
-                        <span asp-validation-for="EmploymentType" class="text-danger"></span>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Experience" class="form-label"></label>
-                        <input type="text" asp-for="Experience" class="form-control" placeholder="e.g. 2-4 years" />
-                        <span asp-validation-for="Experience" class="text-danger"></span>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Qualification" class="form-label"></label>
-                        <input type="text" asp-for="Qualification" class="form-control" />
-                        <span asp-validation-for="Qualification" class="text-danger"></span>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Salary" class="form-label"></label>
-                        <input type="number" asp-for="Salary" class="form-control" step="0.01" />
-                        <span asp-validation-for="Salary" class="text-danger"></span>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Vacancy" class="form-label"></label>
-                        <input type="number" asp-for="Vacancy" class="form-control" min="1" max="10000" />
-                        <span asp-validation-for="Vacancy" class="text-danger"></span>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="LastDateToApply" class="form-label"></label>
-                        <input type="date" asp-for="LastDateToApply" class="form-control"
-                               value="@(Model.LastDateToApply != default ? Model.LastDateToApply.ToString("yyyy-MM-dd") : "")" />
-                        <span asp-validation-for="LastDateToApply" class="text-danger"></span>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Status" class="form-label"></label>
-                        <select asp-for="Status" class="form-select">
-                            <option>Open</option>
-                            <option>Closed</option>
-                            <option>On Hold</option>
-                        </select>
-                        <span asp-validation-for="Status" class="text-danger"></span>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label asp-for="JobDescription" class="form-label"></label>
-                        <textarea asp-for="JobDescription"
-                                  class="form-control"
-                                  rows="5"></textarea>
-                        <span asp-validation-for="JobDescription" class="text-danger"></span>
-                    </div>
-
+                <div class="text-center mb-4">
+                    <span class="badge rounded-pill eyebrow-badge px-3 py-2 mb-3">
+                        <i class="bi bi-briefcase-fill me-1"></i> Job Posting
+                    </span>
+                    <h1 class="fw-bold text-white display-6">
+                        @(Model.JobId == 0 ? "Add Job" : "Update Job")
+                    </h1>
                 </div>
 
-                <div class="mt-3">
+                <div class="card glass-card">
+                    <div class="card-body p-4 p-md-5">
 
-                    @if (Model.JobId == 0)
-                    {
-                        <button type="submit" class="btn btn-success">
-                            Save Job
-                        </button>
-                    }
-                    else
-                    {
-                        <button type="submit" class="btn btn-warning">
-                            Update Job
-                        </button>
-                    }
-                    <button type="submit"
-                            class="btn btn-danger"
-                            formaction="@Url.Action("Delete", "Job")"
-                            formmethod="post"
-                            onclick="return confirm('Are you sure you want to delete this job?');">
-                        Delete
-                    </button>
+                        <form asp-action="Upsert" method="post" asp-controller="Job">
 
-                    <a asp-action="Index" class="btn btn-secondary">
-                        Back to List
-                    </a>
+                            <input type="hidden" asp-for="JobId" />
+                            <input type="hidden" asp-for="PostedDate" />
 
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="CompanyId" class="form-label text-light-50"></label>
+                                    <select asp-for="CompanyId" class="form-select search-select" asp-items="ViewBag.CompanyList">
+                                        <option value="">Select Company</option>
+                                    </select>
+                                    <span asp-validation-for="CompanyId" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="JobTitle" class="form-label text-light-50"></label>
+                                    <input type="text" asp-for="JobTitle" class="form-control dark-input" />
+                                    <span asp-validation-for="JobTitle" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Category" class="form-label text-light-50"></label>
+                                    <select asp-for="Category" class="form-select search-select">
+                                        <option value="">Select Category</option>
+                                        <option>Information Technology</option>
+                                        <option>Healthcare</option>
+                                        <option>Education</option>
+                                        <option>Finance</option>
+                                        <option>Manufacturing</option>
+                                        <option>Retail</option>
+                                        <option>Marketing</option>
+                                        <option>Other</option>
+                                    </select>
+                                    <span asp-validation-for="Category" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Location" class="form-label text-light-50"></label>
+                                    <input type="text" asp-for="Location" class="form-control dark-input" />
+                                    <span asp-validation-for="Location" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="EmploymentType" class="form-label text-light-50"></label>
+                                    <select asp-for="EmploymentType" class="form-select search-select">
+                                        <option value="">Select Employment Type</option>
+                                        <option>Full-Time</option>
+                                        <option>Part-Time</option>
+                                        <option>Contract</option>
+                                        <option>Internship</option>
+                                        <option>Remote</option>
+                                    </select>
+                                    <span asp-validation-for="EmploymentType" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Experience" class="form-label text-light-50"></label>
+                                    <input type="text" asp-for="Experience" class="form-control dark-input" placeholder="e.g. 2-4 years" />
+                                    <span asp-validation-for="Experience" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Qualification" class="form-label text-light-50"></label>
+                                    <input type="text" asp-for="Qualification" class="form-control dark-input" />
+                                    <span asp-validation-for="Qualification" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Salary" class="form-label text-light-50"></label>
+                                    <input type="number" asp-for="Salary" class="form-control dark-input"  min="10000" step="1000" />
+                                    <span asp-validation-for="Salary" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Vacancy" class="form-label text-light-50"></label>
+                                    <input type="number" asp-for="Vacancy" class="form-control dark-input" min="1" max="10000" />
+                                    <span asp-validation-for="Vacancy" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="LastDateToApply" class="form-label text-light-50"></label>
+                                    <input type="date" asp-for="LastDateToApply" class="form-control dark-input"
+                                           value="@(Model.LastDateToApply != default ? Model.LastDateToApply.ToString("yyyy-MM-dd") : "")" />
+                                    <span asp-validation-for="LastDateToApply" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Status" class="form-label text-light-50"></label>
+                                    <select asp-for="Status" class="form-select search-select">
+                                        <option>Open</option>
+                                        <option>Closed</option>
+                                        <option>On Hold</option>
+                                    </select>
+                                    <span asp-validation-for="Status" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 mb-3">
+                                    <label asp-for="JobDescription" class="form-label text-light-50"></label>
+                                    <textarea asp-for="JobDescription" class="form-control dark-input" rows="5"></textarea>
+                                    <span asp-validation-for="JobDescription" class="text-danger small"></span>
+                                </div>
+
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mt-3">
+
+                                @if (Model.JobId == 0)
+                                {
+                                    <button type="submit" class="btn btn-gradient-primary px-4">
+                                        <i class="bi bi-check-circle me-1"></i> Save Job
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-gold px-4">
+                                        <i class="bi bi-arrow-repeat me-1"></i> Update Job
+                                    </button>
+                                }
+
+                                <button type="submit"
+                                        class="btn btn-outline-danger-glass px-4"
+                                        formaction="@Url.Action("Delete", "Job")"
+                                        formmethod="post"
+                                        onclick="return confirm('Are you sure you want to delete this job?');">
+                                    <i class="bi bi-trash me-1"></i> Delete
+                                </button>
+
+                                <a asp-action="Index" class="btn btn-outline-glass px-4">
+                                    <i class="bi bi-arrow-left me-1"></i> Back to List
+                                </a>
+
+                            </div>
+                        </form>
+
+                    </div>
                 </div>
-            </form>
+
+            </div>
         </div>
     </div>
 </div>
