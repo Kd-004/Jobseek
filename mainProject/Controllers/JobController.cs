@@ -52,14 +52,14 @@ namespace mainProject.Controllers
                 return RedirectToAction("Index", "Company");
             }
 
-            ViewBag.CompanyList = new SelectList(new[] { company }, "UserId", "CompanyName", company.UserId);
+            ViewBag.CompanyList = new SelectList(new[] { company }, "Id", "CompanyName", company.Id);
 
             Job job;
             if (id == null || id == 0)
             {
                 job = new Job
                 {
-                    CompanyId = company.UserId,
+                    CompanyId = company.Id.ToString(),
                     Status = "Open"
                 };
             }
