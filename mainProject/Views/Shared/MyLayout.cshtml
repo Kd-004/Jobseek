@@ -144,7 +144,29 @@
                                     <p>Jobs</p>
                                 </a>
                             }
+
+                        <li class="nav-item">
+                            <a asp-controller="ApplyJob"
+                               asp-action="Applications"
+                               class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ApplyJob"
+                                                       && ViewContext.RouteData.Values["Action"]?.ToString() == "Applications"
+                                                       ? "active" : "")">
+
+                                <i class="nav-icon bi bi-file-earmark-person"></i>
+                                <p>Applications</p>
+                            </a>
+
+
+                        <li class="nav-item">
+                            <a asp-controller="ApplyJob"
+                               asp-action="MyApplications"
+                               class="nav-link">
+                                <i class="bi bi-file-earmark-check"></i>
+                                <p>My Applications</p>
+                            </a>
                         </li>
+
+                        
                     </ul>
                 </nav>
 

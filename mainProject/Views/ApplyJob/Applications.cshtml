@@ -1,0 +1,165 @@
+﻿@model IEnumerable<mainProject.Models.JobApplication>
+
+@{
+    ViewData["Title"] = "Applications";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<style>
+
+    body {
+        background: #081423;
+    }
+
+    .glass-card {
+        background: rgba(17,25,40,.78);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 18px;
+        box-shadow: 0 20px 40px rgba(0,0,0,.35);
+    }
+
+    .table {
+        color: white;
+    }
+
+        .table thead {
+            background: #10233d;
+        }
+
+        .table tbody tr {
+            border-color: #1d3657;
+        }
+
+            .table tbody tr:hover {
+                background: rgba(255,255,255,.04);
+            }
+
+    .badge-pending {
+        background: #ffc107;
+        color: black;
+    }
+
+    .badge-accepted {
+        background: #198754;
+    }
+
+    .badge-rejected {
+        background: #dc3545;
+    }
+
+    .btn-glass {
+        border-radius: 10px;
+        font-weight: 600;
+    }
+
+    .page-title {
+        color: white;
+        font-weight: 700;
+    }
+
+    .resume-btn {
+        background: #1d4ed8;
+        color: white;
+        border: none;
+    }
+
+        .resume-btn:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+</style>
+
+<div class="theme-page p-5" style="height:100vh;">
+
+    <h2 class="page-title mb-4">
+        <i class="bi bi-people-fill"></i>
+        Job Applications
+    </h2>
+
+    <div class="glass-card p-4">
+
+        <table class="table align-middle">
+
+           
+
+            <thead>
+                <tr>
+                    <th>Applicant</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Job</th>
+                    <th>Resume</th>
+                    <th>Applied On</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.JobSeeker.FullName</td>
+
+                        <td>@item.JobSeeker.Email</td>
+
+                        <td>@item.JobSeeker.Phone</td>
+
+                        <td>@item.Job.JobTitle</td>
+
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.JobSeeker.ResumeFile))
+                            {
+                                <a href="@item.JobSeeker.ResumeFile"
+                                   target="_blank"
+                                   class="btn btn-outline-info btn-sm">
+                                    View Resume
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Resume</span>
+                            }
+                        </td>
+
+                        <td>@item.AppliedDate.ToString("dd MMM yyyy")</td>
+
+                        <td>@item.Status</td>
+
+                        <td>
+                            @if (item.Status == "Pending" || item.Status == "Applied")
+                            {
+                                <form asp-action="Accept" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="bi bi-check-circle"></i> Accept
+                                    </button>
+                                </form>
+
+                                <form asp-action="Reject" method="post" class="d-inline ms-1">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-x-circle"></i> Reject
+                                    </button>
+                                </form>
+                            }
+                            else if (item.Status == "Accepted")
+                            {
+                                <span class="badge bg-success">Accepted</span>
+                            }
+                            else if (item.Status == "Rejected")
+                            {
+                                <span class="badge bg-danger">Rejected</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+</div>

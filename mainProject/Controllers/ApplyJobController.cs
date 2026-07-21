@@ -67,8 +67,77 @@ namespace mainProject.Controllers
             return View(jobs);
         }
 
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> MyApplications()
+        {
+            var userId = _userManager.GetUserId(User);
 
-    
+            var jobSeeker = await _context.JobSeekers
+                .FirstOrDefaultAsync(j => j.UserId == userId);
+
+            if (jobSeeker == null)
+            {
+                return NotFound();
+            }
+
+            var applications = await _context.JobApplications
+                .Where(a => a.JobSeekerId == jobSeeker.Id)
+                .Include(a => a.Job)
+                .Include(a => a.Company)
+                .OrderByDescending(a => a.AppliedDate)
+                .ToListAsync();
+
+            return View(applications);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Applications()
+        {
+            var applications = await _context.JobApplications
+                .Include(a => a.Job)
+                .Include(a => a.JobSeeker)
+                .Include(a => a.Company)
+                .OrderByDescending(a => a.AppliedDate)
+                .ToListAsync();
+
+            return View(applications);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Accept(int id)
+        {
+            var application = await _context.JobApplications.FindAsync(id);
+
+            if (application == null)
+                return NotFound();
+
+            application.Status = "Accepted";
+
+            await _context.SaveChangesAsync();
+
+            TempData["success"] = "Application Accepted.";
+
+            return RedirectToAction(nameof(Applications));
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Reject(int id)
+        {
+            var application = await _context.JobApplications.FindAsync(id);
+
+            if (application == null)
+                return NotFound();
+
+            application.Status = "Rejected";
+
+            await _context.SaveChangesAsync();
+
+            TempData["success"] = "Application Rejected.";
+
+            return RedirectToAction(nameof(Applications));
+        }
+
         [HttpGet]
         public async Task<IActionResult> Details(int jobId)
         {
@@ -150,6 +219,10 @@ namespace mainProject.Controllers
 
             TempData["Success"] = $"You have successfully applied for {job.JobTitle}.";
             return RedirectToAction(nameof(Details), new { jobId = jobId });
+        }
+        public IActionResult Test()
+        {
+            return Content("Test action works");
         }
     }
 }
