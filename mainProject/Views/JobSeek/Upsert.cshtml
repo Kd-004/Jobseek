@@ -6,7 +6,7 @@
 }
 
 <h2>@ViewData["Title"]</h2>
-
+<div class="theme-main page py-5">
 <form asp-action="Upsert" asp-controller="JobSeek" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="UserId" />
@@ -160,6 +160,7 @@
         </button>
     </div>
 </form>
+</div>
 
 @section Scripts {
     @{

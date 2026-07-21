@@ -1,0 +1,656 @@
+﻿@model mainProject.ViewModels.UserDashboard
+
+@{
+    ViewData["Title"] = "User Dashboard";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-white">
+                Welcome back, @User.Identity?.Name
+            </h2>
+
+            <p class="text-secondary mb-0">
+                Here's what's happening with your job search today.
+            </p>
+        </div>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="text-decoration-none">
+                        Home
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item active text-secondary">
+                    Dashboard
+                </li>
+            </ol>
+        </nav>
+
+    </div>
+
+
+    <!-- Statistics -->
+
+    <div class="row g-4 mb-4">
+
+        <!-- Applied Jobs -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card glass-card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h1 class="fw-bold text-white">
+                                @Model.AppliedJobs
+                            </h1>
+
+                            <h5 class="text-secondary">
+                                Applied Jobs
+                            </h5>
+
+                        </div>
+
+                        <i class="bi bi-file-earmark-text display-5 text-warning"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer bg-transparent">
+
+                    <a asp-controller="ApplyJob"
+                       asp-action="Index"
+                       class="text-decoration-none">
+
+                        View Applications
+                        <i class="bi bi-link-45deg"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Saved Jobs -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card glass-card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h1 class="fw-bold text-white">
+                                @Model.SavedJobs
+                            </h1>
+
+                            <h5 class="text-secondary">
+                                Saved Jobs
+                            </h5>
+
+                        </div>
+
+                        <i class="bi bi-heart display-5 text-danger"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer bg-transparent">
+
+                    <a href="#"
+                       class="text-decoration-none">
+
+                        View Saved Jobs
+                        <i class="bi bi-link-45deg"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Interview Calls -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card glass-card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h1 class="fw-bold text-white">
+                                @Model.InterviewCalls
+                            </h1>
+
+                            <h5 class="text-secondary">
+                                Interview Calls
+                            </h5>
+
+                        </div>
+
+                        <i class="bi bi-calendar-check display-5 text-success"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer bg-transparent">
+
+                    <a href="#"
+                       class="text-decoration-none">
+
+                        View Interviews
+                        <i class="bi bi-link-45deg"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Profile -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card glass-card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h1 class="fw-bold text-white">
+                                @Model.ProfileCompletion%
+                            </h1>
+
+                            <h5 class="text-secondary">
+                                Profile Completion
+                            </h5>
+
+                        </div>
+
+                        <i class="bi bi-person-circle display-5 text-info"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer bg-transparent">
+
+                    <a asp-controller="JobSeek"
+                       asp-action="Index"
+                       class="text-decoration-none">
+
+                        Update Profile
+                        <i class="bi bi-link-45deg"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Quick Actions -->
+
+    <div class="card glass-card mb-4">
+
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-4">
+
+                    <h5 class="fw-bold mb-0">
+                        QUICK ACTIONS
+                    </h5>
+
+                </div>
+
+                <div class="col-md-8 text-md-end">
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="btn btn-primary me-2">
+
+                        <i class="bi bi-search"></i>
+
+                        Find Jobs
+
+                    </a>
+
+                    <a href="#"
+                       class="btn btn-outline-light me-2">
+
+                        <i class="bi bi-heart"></i>
+
+                        Saved Jobs
+
+                    </a>
+
+                    <a asp-controller="ApplyJob"
+                       asp-action="Index"
+                       class="btn btn-outline-light me-2">
+
+                        <i class="bi bi-file-earmark-text"></i>
+
+                        My Applications
+
+                    </a>
+
+                    <a asp-controller="JobSeek"
+                       asp-action="Index"
+                       class="btn btn-outline-light">
+
+                        <i class="bi bi-person"></i>
+
+                        My Profile
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Recommended Jobs & Recent Applications -->
+
+    <div class="row g-4">
+
+        <!-- Recommended Jobs -->
+
+        <div class="col-lg-7">
+
+            <div class="card glass-card h-100">
+
+                <div class="card-header bg-transparent border-bottom d-flex justify-content-between align-items-center">
+
+                    <h4 class="mb-0">
+                        <i class="bi bi-briefcase me-2"></i>
+                        Recommended Jobs
+                    </h4>
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="text-decoration-none">
+                        View All
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+                <div class="card-body">
+
+                    @if (Model.RecommendedJobs.Any())
+                    {
+                        @foreach (var job in Model.RecommendedJobs)
+                        {
+                            <div class="border rounded p-3 mb-3">
+
+                                <div class="d-flex justify-content-between">
+
+                                    <div>
+
+                                        <h5 class="fw-bold text-white">
+                                            @job.JobTitle
+                                        </h5>
+
+                                        <p class="mb-1 text-secondary">
+
+                                            <i class="bi bi-building"></i>
+
+                                        <p class="mb-1 text-secondary">
+                                            <i class="bi bi-geo-alt"></i>
+                                            @job.Location
+                                        </p>
+                                        </p>
+
+                                        <p class="mb-1 text-secondary">
+
+                                            <i class="bi bi-geo-alt"></i>
+
+                                            @job.Location
+
+                                        </p>
+
+                                        <p class="mb-0 text-warning fw-semibold">
+
+                                            ₹ @job.Salary
+
+                                        </p>
+
+                                    </div>
+
+                                    <div class="text-end">
+
+                                        <a asp-controller="ApplyJob"
+                                           asp-action="JobDetails"
+                                           asp-route-id="@job.JobId"
+                                           class="btn btn-primary btn-sm">
+
+                                            Apply Now
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+
+                            <i class="bi bi-search display-3 text-secondary"></i>
+
+                            <h4 class="mt-3 text-secondary">
+                                No Jobs Available
+                            </h4>
+
+                            <p class="text-secondary">
+                                Please check back later.
+                            </p>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Recent Applications -->
+        @if (Model.RecentApplications.Any())
+        {
+            @foreach (var application in Model.RecentApplications)
+            {
+                <div class="border rounded p-3 mb-3">
+
+                    <h6 class="fw-bold text-white">
+                        @application.Job.JobTitle
+                    </h6>
+
+                    <small class="text-secondary">
+                        Applied :
+                        @application.AppliedDate.ToString("dd MMM yyyy")
+                    </small>
+
+                    <br />
+
+                    @if (application.Status == "Pending")
+                    {
+                        <span class="badge bg-warning text-dark">
+                            Pending
+                        </span>
+                    }
+                    else if (application.Status == "Shortlisted")
+                    {
+                        <span class="badge bg-success">
+                            Shortlisted
+                        </span>
+                    }
+                    else if (application.Status == "Rejected")
+                    {
+                        <span class="badge bg-danger">
+                            Rejected
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">
+                            @application.Status
+                        </span>
+                    }
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-person-x display-3 text-secondary"></i>
+
+                <h4 class="mt-3 text-secondary">
+                    No applications yet.
+                </h4>
+
+                <p class="text-secondary">
+                    Start applying for jobs today.
+                </p>
+            </div>
+        }
+    <!-- Saved Jobs & Upcoming Interviews -->
+
+    <div class="row g-4 mb-4">
+
+        <!-- Saved Jobs -->
+
+       
+
+
+        <!-- Upcoming Interviews -->
+
+        <div class="col-lg-6">
+
+            <div class="card glass-card h-100">
+
+                <div class="card-header bg-transparent border-bottom">
+
+                    <h4 class="mb-0">
+
+                        <i class="bi bi-calendar-event me-2 text-success"></i>
+
+                        Upcoming Interviews
+
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    @if (Model.InterviewCalls > 0)
+                    {
+                        <div class="border rounded p-3 mb-3">
+
+                            <div class="d-flex justify-content-between align-items-start">
+
+                                <div>
+
+                                    <h6 class="fw-bold text-white">Software Engineer</h6>
+
+                                    <p class="text-secondary mb-1">ABC Technologies</p>
+
+                                    <small class="text-secondary">
+                                        22 Jul 2026 • 10:00 AM
+                                    </small>
+
+                                </div>
+
+                                <span class="badge bg-success">Scheduled</span>
+
+                            </div>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+
+                            <i class="bi bi-calendar-x display-3 text-secondary"></i>
+
+                            <h5 class="mt-3 text-secondary">No Interviews Scheduled</h5>
+
+                            <p class="text-secondary">
+                                Interview invitations will appear here.
+                            </p>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Recent Notifications -->
+
+    <div class="card glass-card mb-4">
+
+        <div class="card-header bg-transparent border-bottom d-flex justify-content-between align-items-center">
+
+            <h4 class="mb-0">
+
+                <i class="bi bi-bell me-2 text-warning"></i>
+
+                Recent Notifications
+
+            </h4>
+
+            <span class="badge bg-warning text-dark">3 New</span>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="d-flex align-items-start mb-4 pb-3 border-bottom">
+
+                <div class="flex-shrink-0">
+
+                    <div class="bg-success bg-opacity-10 rounded-circle p-2">
+
+                        <i class="bi bi-check-circle text-success"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="ms-3 flex-grow-1">
+
+                    <h6 class="fw-semibold text-white mb-1">
+                        Application Viewed
+                    </h6>
+
+                    <p class="text-secondary mb-1">
+                        ABC Pvt Ltd has viewed your application for Software Developer.
+                    </p>
+
+                    <small class="text-secondary">2 hours ago</small>
+
+                </div>
+
+            </div>
+
+
+            <div class="d-flex align-items-start mb-4 pb-3 border-bottom">
+
+                <div class="flex-shrink-0">
+
+                    <div class="bg-primary bg-opacity-10 rounded-circle p-2">
+
+                        <i class="bi bi-briefcase text-primary"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="ms-3 flex-grow-1">
+
+                    <h6 class="fw-semibold text-white mb-1">
+                        New Job Match
+                    </h6>
+
+                    <p class="text-secondary mb-1">
+                        A new Java Developer position matches your profile.
+                    </p>
+
+                    <small class="text-secondary">5 hours ago</small>
+
+                </div>
+
+            </div>
+
+
+            <div class="d-flex align-items-start">
+
+                <div class="flex-shrink-0">
+
+                    <div class="bg-warning bg-opacity-10 rounded-circle p-2">
+
+                        <i class="bi bi-star text-warning"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="ms-3 flex-grow-1">
+
+                    <h6 class="fw-semibold text-white mb-1">
+                        Profile Shortlisted
+                    </h6>
+
+                    <p class="text-secondary mb-1">
+                        Your profile has been shortlisted by XYZ Solutions.
+                    </p>
+
+                    <small class="text-secondary">1 day ago</small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

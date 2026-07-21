@@ -16,6 +16,7 @@
 else
 {
     <div class="card">
+        <div class="theme-page py-5">
         <div class="card-header d-flex align-items-center justify-content-between">
             <h3>@Model.FullName</h3>
             <a asp-action="Upsert" asp-route-id="@Model.Id" class="btn btn-warning">
@@ -93,6 +94,7 @@ else
                     <span class="text-muted">-</span>
                 }
             </p>
+        </div>
         </div>
     </div>
 }

@@ -115,7 +115,7 @@
                         <li class="nav-item">
                             @if (User.IsInRole("Admin"))
                             {
-                                <a href="/dashboard" class="nav-link active">
+                                <a href="/AdminDashboard" class="nav-link active">
                                     <i class="nav-icon bi bi-speedometer2"></i>
                                     <p>Dashboard</p>
                                 </a>
@@ -131,7 +131,7 @@
 
                             @if (User.IsInRole("User"))
                             {
-                                <a href="/dashboard" class="nav-link active">
+                                <a href="/UserDashboard" class="nav-link active">
                                     <i class="nav-icon bi bi-speedometer2"></i>
                                     <p>Dashboard</p>
                                 </a>
@@ -147,6 +147,11 @@
                         </li>
                     </ul>
                 </nav>
+
+                <a asp-controller="Home" asp-action="Index" class="btn btn-gold m-5">
+                    <i>Logout</i>
+                </a>
+
             </div>
         </aside>
 

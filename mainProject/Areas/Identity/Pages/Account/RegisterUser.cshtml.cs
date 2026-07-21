@@ -144,7 +144,7 @@ public class RegisterUserModel : PageModel
                 else
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Dashboard");
+                    return RedirectToAction("Index", "UserDashboard");
                 }
             }
             foreach (var error in result.Errors)

@@ -1,15 +1,18 @@
 ﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using mainProject.Models;
 using AspNetCoreGeneratedDocument;
+using mainProject.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace mainProject.Controllers
 {
-    public class DashboardController : Controller
-    {
-        private readonly ILogger<DashboardController> _logger;
 
-        public DashboardController(ILogger<DashboardController> logger)
+    [Authorize(Roles = "Admin")]
+    public class AdminDashboardController : Controller
+    {
+        private readonly ILogger<AdminDashboardController> _logger;
+
+        public AdminDashboardController(ILogger<AdminDashboardController> logger)
         {
             _logger = logger;
         }

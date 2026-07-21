@@ -1,11 +1,13 @@
 ﻿using System.Security.Claims;
 using mainProject.Data;
 using mainProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace mainProject.Controllers
 {
+    [Authorize(Roles = "Admin")] // default for this controller — most actions are employer-only
     public class CompanyController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -15,6 +17,7 @@ namespace mainProject.Controllers
             _context = context;
         }
 
+        // "My Company" profile — for the logged-in employer viewing their own company
         [HttpGet]
         public IActionResult Index()
         {
@@ -118,8 +121,8 @@ namespace mainProject.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-        // GET: Company/Details/5
+        // GET: Company/Details/5 — PUBLIC company page (job seekers/guests browse this)
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -200,37 +203,6 @@ namespace mainProject.Controllers
 
             return View(company);
         }
-
-        // GET: Company/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //        return NotFound();
-
-        //    var company = await _context.Companies
-        //        .FirstOrDefaultAsync(c => c.Id == id);
-
-        //    if (company == null)
-        //        return NotFound();
-
-        //    return View(company);
-        //}
-
-        //// POST: Company/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var company = await _context.Companies.FindAsync(id);
-
-        //    if (company != null)
-        //    {
-        //        _context.Companies.Remove(company);
-        //        await _context.SaveChangesAsync();
-        //    }
-
-        //    return RedirectToAction(nameof(Index));
-        //}
 
         private bool CompanyExists(int id)
         {

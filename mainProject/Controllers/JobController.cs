@@ -14,41 +14,66 @@ namespace mainProject.Controllers
             _context = context;
         }
         // GET: Job
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Jobs.ToListAsync());
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.HasCompany = await _context.Companies.AnyAsync(c => c.UserId == userId);
+
+            var jobs = await _context.Jobs.ToListAsync(); // adjust to your existing query
+            return View(jobs);
         }
         // GET: Job/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-                return NotFound();
-            var job = await _context.Jobs.FirstOrDefaultAsync(x => x.JobId == id);
+            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.JobId == id);
+
             if (job == null)
+            {
                 return NotFound();
+            }
+
             return View(job);
         }
 
         // GET: Job/Upsert
         // GET: Job/Upsert/5
+        [HttpGet]
         public async Task<IActionResult> Upsert(int? id)
         {
-            await PopulateCompanyList();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (id == null || id == 0)
+            var company = await _context.Companies.FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (company == null)
             {
-                // Insert
-                return View(new Job());
+                TempData["error"] = "Please create your company profile before posting a job.";
+                return RedirectToAction("Index", "Company");
             }
 
-            // Update
-            var job = await _context.Jobs.FindAsync(id);
-            if (job == null)
-                return NotFound();
+            ViewBag.CompanyList = new SelectList(new[] { company }, "UserId", "CompanyName", company.UserId);
+
+            Job job;
+            if (id == null || id == 0)
+            {
+                job = new Job
+                {
+                    CompanyId = company.UserId,
+                    Status = "Open"
+                };
+            }
+            else
+            {
+                job = await _context.Jobs.FirstOrDefaultAsync(j => j.JobId == id);
+                if (job == null)
+                {
+                    return NotFound();
+                }
+            }
 
             return View(job);
         }
-
         // POST: Job/Upsert
         [HttpPost]
         [ValidateAntiForgeryToken]

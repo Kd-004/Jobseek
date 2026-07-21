@@ -1,10 +1,17 @@
 ﻿<!--begin::App Content Header-->
+@{
+    ViewData["Title"] = "AdminDashboard";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+<div class="theme-page py-5" style="height:100vh;">
 <div class="app-content-header">
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-sm-6">
-                <h3 class="mb-0 fw-bold">Welcome back, @(ViewBag.CompanyName ?? "Employer")</h3>
+                <h3 class="mb-0 fw-bold">Welcome back, @(ViewBag.CompanyName ?? "Admin")</h3>
                 <p class="text-light-50 mb-0 small">Here's what's happening with your job postings today.</p>
+                <br /><br />
+                
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
@@ -207,5 +214,6 @@
         </div>
 
     </div>
+</div>
 </div>
 <!--end::App Content-->
