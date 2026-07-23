@@ -1,219 +1,288 @@
-﻿<!--begin::App Content Header-->
+﻿<!--begin::App Content Header--->
+@model mainProject.ViewModels.AdminDashboardViewModel
 @{
-    ViewData["Title"] = "AdminDashboard";
-    Layout = "~/Views/Shared/MyLayout.cshtml";
+	ViewData["Title"] = "AdminDashboard";
+	Layout = "~/Views/Shared/MyLayout.cshtml";
 }
-<div class="theme-page py-5" style="height:100vh;">
-<div class="app-content-header">
-    <div class="container-fluid">
-        <div class="row align-items-center">
-            <div class="col-sm-6">
-                <h3 class="mb-0 fw-bold">Welcome back, @(ViewBag.CompanyName ?? "Admin")</h3>
-                <p class="text-light-50 mb-0 small">Here's what's happening with your job postings today.</p>
-                <br /><br />
-                
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-end">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                </ol>
-            </div>
-        </div>
-    </div>
+
+<div class="theme-page">
+	<div class="app-content-header">
+		<div class="container-fluid">
+			<div class="row align-items-center">
+				<div class="col-sm-6">
+					<h3 class="mb-0 mt-2 fw-bold">Welcome back, @(ViewBag.CompanyName ?? "Admin")</h3>
+					<p class="text-light-50 mb-0 small">Here's what's happening with your job postings today.</p>
+					<br /><br />
+
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-end">
+						<li class="breadcrumb-item"><a href="#">Home</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--end::App Content Header-->
+	<!--begin::App Content-->
+	<div class="app-content">
+		<div class="container-fluid">
+
+			<!--begin::Row - Stat Widgets-->
+			<div class="row m-4">
+				<div class="col-lg-3 col-6">
+					<div class="stat-card">
+						<div class="stat-card-body">
+							<h3>@Model.ActiveJobPostings</h3>
+							<p>Active Job Postings</p>
+							<i class="bi bi-briefcase-fill stat-card-icon"></i>
+						</div>
+						<a asp-controller="Job" asp-action="Index" class="stat-card-footer">
+							View postings <i class="bi bi-link-45deg"></i>
+						</a>
+					</div>
+				</div>
+
+				<div class="col-lg-3 col-6">
+					<div class="stat-card">
+						<div class="stat-card-body">
+							<h3>@Model.TotalApplications</h3>
+							<p>Total Applications</p>
+							<i class="bi bi-file-earmark-text-fill stat-card-icon"></i>
+						</div>
+						<a asp-controller="Applications" asp-action="Index" class="stat-card-footer">
+							Review applicants <i class="bi bi-link-45deg"></i>
+						</a>
+					</div>
+				</div>
+
+				<div class="col-lg-3 col-6">
+					<div class="stat-card">
+						<div class="stat-card-body">
+							<h3>@Model.ShortlistedCandidates</h3>
+							<p>Shortlisted Candidates</p>
+							<i class="bi bi-person-check-fill stat-card-icon"></i>
+						</div>
+						<a asp-controller="Applications" asp-action="Shortlisted" class="stat-card-footer">
+							View shortlist <i class="bi bi-link-45deg"></i>
+						</a>
+					</div>
+
+				</div>
+				<div class="col-lg-3 col-6">
+					<div class="stat-card">
+						<div class="stat-card-body">
+							<h3>@Model.RejectedCandidates</h3>
+							<p>Rejected Candidates</p>
+							<i class="bi bi-person-fill-x stat-card-icon"></i>
+						</div>
+						<a asp-controller="Applications" asp-action="Rejected" class="stat-card-footer">
+							View Rejected <i class="bi bi-link-45deg"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--end::Row - Stat Widgets-->
+		<!--begin::Quick Actions-->
+		<div class="card glass-card mb-4">
+			<div class="card-body py-3 px-4">
+				<div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+					<span class="text-light-50 small text-uppercase fw-semibold">Quick Actions</span>
+					<div class="d-flex flex-wrap gap-2">
+						<a asp-controller="Job" asp-action="Upsert" class="btn btn-gradient-primary btn-sm">
+							<i class="bi bi-plus-circle me-1"></i> Post a New Job
+						</a>
+						<a asp-controller="Company" asp-action="Index" class="btn btn-outline-glass btn-sm">
+							<i class="bi bi-building me-1"></i> Company Profile
+						</a>
+						<a asp-controller="Applications" asp-action="Index" class="btn btn-outline-glass btn-sm">
+							<i class="bi bi-people me-1"></i> All Applicants
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--end::Quick Actions-->
+		<!-- Recent Job postings-->
+		<div class="row">
+			<div class="col-lg-7">
+				<div class="card glass-card h-100">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="card-title">
+							<i class="bi bi-briefcase me-2"></i>Recent Job Postings
+						</h3>
+
+						<a asp-controller="Job"
+						   asp-action="Index"
+						   class="btn btn-tool small">
+							View All <i class="bi bi-arrow-right ms-1"></i>
+						</a>
+					</div>
+
+					<div class="card-body p-0">
+						<div class="table-responsive">
+
+							<table class="table table-borderless align-middle mb-0">
+
+								<tbody>
+
+									@if (Model.RecentJobPostings.Any())
+									{
+										@foreach (var job in Model.RecentJobPostings)
+										{
+											<tr>
+
+												<td style="width:65%;" class="ps-4">
+
+													<h6 class="text-white mb-1">
+														@job.JobTitle
+													</h6>
+
+													<small class="text-light-50">
+														<i class="bi bi-geo-alt me-1"></i>@job.Location
+														<span class="mx-2">•</span>
+														@job.EmploymentType
+													</small>
+
+												</td>
+
+												<td class="text-center" style="width:20%;">
+
+													@if (job.Status == "Open")
+													{
+														<span class="badge bg-success">
+															Open
+														</span>
+													}
+													else if (job.Status == "On Hold")
+													{
+														<span class="badge bg-warning text-dark">
+															On Hold
+														</span>
+													}
+													else
+													{
+														<span class="badge bg-secondary">
+															Closed
+														</span>
+													}
+
+												</td>
+
+												<td class="text-end pe-4" style="width:15%;">
+
+													<a asp-controller="Job"
+													   asp-action="Upsert"
+													   asp-route-id="@job.JobId"
+													   class="btn btn-sm btn-outline-light">
+
+														<i class="bi bi-pencil-square"></i>
+
+													</a>
+
+												</td>
+
+											</tr>
+										}
+									}
+									else
+									{
+										<tr>
+											<td colspan="3" class="text-center py-5 text-light">
+												No job postings found.
+											</td>
+										</tr>
+									}
+
+								</tbody>
+
+							</table>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="col-lg-5">
+				<div class="card glass-card h-100">
+
+					<div class="card-header d-flex justify-content-between align-items-center">
+
+						<h3 class="card-title">
+							<i class="bi bi-people me-2"></i>Recent Applicants
+						</h3>
+
+						<span class="badge bg-primary">
+							@Model.RecentApplicants.Count New
+						</span>
+
+					</div>
+
+					<div class="card-body">
+
+						@if (Model.RecentApplicants.Any())
+						{
+							@foreach (var app in Model.RecentApplicants)
+							{
+								<div class="d-flex align-items-center py-3 border-bottom">
+
+									<div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center me-3"
+										 style="width:45px;height:45px;">
+
+										@app.JobSeeker.FullName.Substring(0, 1).ToUpper()
+
+									</div>
+
+									<div class="flex-grow-1">
+
+										<h6 class="mb-1 text-white">
+											@app.JobSeeker.FullName
+										</h6>
+
+										<small class="text-secondary">
+											@app.Job.JobTitle
+										</small>
+
+									</div>
+
+									@if (app.Status == "Accepted")
+									{
+										<span class="badge bg-success">Accepted</span>
+									}
+									else if (app.Status == "Rejected")
+									{
+										<span class="badge bg-danger">Rejected</span>
+									}
+									else
+									{
+										<span class="badge bg-warning text-dark">
+											Pending
+										</span>
+									}
+
+								</div>
+							}
+						}
+						else
+						{
+							<div class="text-center py-5 text-light">
+								No applicants yet.
+							</div>
+						}
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
 </div>
-<!--end::App Content Header-->
-<!--begin::App Content-->
-<div class="app-content">
-    <div class="container-fluid">
-
-        <!--begin::Row - Stat Widgets-->
-        <div class="row g-4 mb-4">
-            <div class="col-lg-3 col-6">
-                <div class="stat-card">
-                    <div class="stat-card-body">
-                        <h3>@(ViewBag.ActiveJobs ?? 0)</h3>
-                        <p>Active Job Postings</p>
-                        <i class="bi bi-briefcase-fill stat-card-icon"></i>
-                    </div>
-                    <a asp-controller="Job" asp-action="Index" class="stat-card-footer">
-                        View postings <i class="bi bi-link-45deg"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <div class="stat-card">
-                    <div class="stat-card-body">
-                        <h3>@(ViewBag.TotalApplications ?? 0)</h3>
-                        <p>Total Applications</p>
-                        <i class="bi bi-file-earmark-text-fill stat-card-icon"></i>
-                    </div>
-                    <a asp-controller="Applications" asp-action="Index" class="stat-card-footer">
-                        Review applicants <i class="bi bi-link-45deg"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <div class="stat-card">
-                    <div class="stat-card-body">
-                        <h3>@(ViewBag.Shortlisted ?? 0)</h3>
-                        <p>Shortlisted Candidates</p>
-                        <i class="bi bi-person-check-fill stat-card-icon"></i>
-                    </div>
-                    <a asp-controller="Applications" asp-action="Shortlisted" class="stat-card-footer">
-                        View shortlist <i class="bi bi-link-45deg"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <div class="stat-card">
-                    <div class="stat-card-body">
-                        <h3>@(ViewBag.InterviewsScheduled ?? 0)</h3>
-                        <p>Interviews Scheduled</p>
-                        <i class="bi bi-calendar-check-fill stat-card-icon"></i>
-                    </div>
-                    <a asp-controller="Interviews" asp-action="Index" class="stat-card-footer">
-                        View calendar <i class="bi bi-link-45deg"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!--end::Row - Stat Widgets-->
-        <!--begin::Quick Actions-->
-        <div class="card glass-card mb-4">
-            <div class="card-body py-3 px-4">
-                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                    <span class="text-light-50 small text-uppercase fw-semibold">Quick Actions</span>
-                    <div class="d-flex flex-wrap gap-2">
-                        <a asp-controller="Job" asp-action="Upsert" class="btn btn-gradient-primary btn-sm">
-                            <i class="bi bi-plus-circle me-1"></i> Post a New Job
-                        </a>
-                        <a asp-controller="Company" asp-action="Index" class="btn btn-outline-glass btn-sm">
-                            <i class="bi bi-building me-1"></i> Company Profile
-                        </a>
-                        <a asp-controller="Applications" asp-action="Index" class="btn btn-outline-glass btn-sm">
-                            <i class="bi bi-people me-1"></i> All Applicants
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--end::Quick Actions-->
-
-        <div class="row g-4">
-
-            <!-- Recent Job Postings -->
-            <div class="col-lg-7">
-                <div class="card glass-card h-100">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="card-title">
-                            <i class="bi bi-briefcase me-2"></i>Recent Job Postings
-                        </h3>
-                        <a asp-controller="Job" asp-action="Index" class="btn btn-tool small">
-                            View All <i class="bi bi-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-borderless align-middle mb-0">
-                                <tbody>
-                                    @if (ViewBag.RecentJobs != null)
-                                    {
-                                        @foreach (var job in (IEnumerable<mainProject.Models.Job>)ViewBag.RecentJobs)
-                                        {
-                                            <tr>
-                                                <td class="ps-4">
-                                                    <h6 class="text-white mb-1">@job.JobTitle</h6>
-                                                    <span class="text-light-50 small">
-                                                        <i class="bi bi-geo-alt me-1"></i>@job.Location
-                                                        <span class="mx-2">&middot;</span>
-                                                        @job.EmploymentType
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    @if (job.Status == "Open")
-                                                    {
-                                                        <span class="badge badge-soft-success">Open</span>
-                                                    }
-                                                    else if (job.Status == "On Hold")
-                                                    {
-                                                        <span class="badge bg-warning text-dark">On Hold</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="badge badge-soft-light">Closed</span>
-                                                    }
-                                                </td>
-                                                <td class="text-end pe-4">
-                                                    <a asp-controller="Job" asp-action="Upsert" asp-route-id="@job.JobId" class="btn btn-tool">
-                                                        <i class="bi bi-pencil-square"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <tr>
-                                            <td class="text-center text-light-50 py-5">
-                                                <i class="bi bi-inbox display-6 d-block mb-2 opacity-50"></i>
-                                                No job postings yet.
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /Recent Job Postings -->
-            <!-- Recent Applicants -->
-            <div class="col-lg-5">
-                <div class="card glass-card h-100">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="card-title">
-                            <i class="bi bi-people me-2"></i>Recent Applicants
-                        </h3>
-                        <span class="badge badge-soft-info">@(ViewBag.NewApplicantsCount ?? 0) new</span>
-                    </div>
-                    <div class="card-body p-4">
-                        @if (ViewBag.RecentApplicants != null)
-                        {
-                            @foreach (var app in (IEnumerable<dynamic>)ViewBag.RecentApplicants)
-                            {
-                                <div class="d-flex align-items-center py-3 border-bottom" style="border-color: rgba(255,255,255,.08) !important;">
-                                    <div class="icon-circle icon-blue me-3" style="width:44px;height:44px;font-size:1.1rem;">
-                                        @app.CandidateInitials
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h6 class="text-white mb-0">@app.CandidateName</h6>
-                                        <span class="text-light-50 small">Applied for @app.JobTitle</span>
-                                    </div>
-                                    <a href="#" class="btn btn-tool">
-                                        <i class="bi bi-chevron-right"></i>
-                                    </a>
-                                </div>
-                            }
-                        }
-                        else
-                        {
-                            <div class="text-center text-light-50 py-5">
-                                <i class="bi bi-person-x display-6 d-block mb-2 opacity-50"></i>
-                                No applicants yet.
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-            <!-- /Recent Applicants -->
-
-        </div>
-
-    </div>
 </div>
-</div>
+
 <!--end::App Content-->

@@ -336,6 +336,22 @@ body {
         transform: translateY(-2px);
     }
 
+.btn-logout {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 12px 20px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+    .btn-logout:hover {
+        background: rgba(255,255,255,0.15);
+        color: #ffd166;
+    }
+
 /* ============ File input (dark) ============ */
 .dark-file-input {
     cursor: pointer;
@@ -757,3 +773,24 @@ body {
         .app-footer.footer-theme a:hover {
             color: #ffd98a;
         }
+
+
+
+.glass-card {
+    transition: all .35s ease;
+    cursor: pointer;
+}
+
+    .glass-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0,0,0,.35);
+    }
+
+.dashboard-icon {
+    transition: all .35s ease;
+}
+
+.glass-card:hover .dashboard-icon {
+    transform: scale(1.25) rotate(10deg);
+    filter: drop-shadow(0 0 15px currentColor);
+}
