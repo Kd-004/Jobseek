@@ -39,8 +39,15 @@ namespace mainProject.Controllers
                 .CountAsync(x => x.JobSeekerId == jobSeeker.Id);
 
             // Placeholder values
-            model.SavedJobs = 0;
-            model.InterviewCalls = 0;
+            model.AcceptedJobs = await _context.JobApplications
+      .CountAsync(x =>
+          x.JobSeekerId == jobSeeker.Id &&
+          x.Status == "Accepted");
+
+            model.RejectedJobs = await _context.JobApplications
+                .CountAsync(x =>
+                    x.JobSeekerId == jobSeeker.Id &&
+                    x.Status == "Rejected");
             model.ProfileCompletion = 80;
 
             // Recent Applications

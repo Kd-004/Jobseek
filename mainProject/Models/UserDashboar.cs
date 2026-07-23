@@ -7,9 +7,9 @@ namespace mainProject.ViewModels
     {
         public int AppliedJobs { get; set; }
 
-        public int SavedJobs { get; set; }
+        public int AcceptedJobs { get; set; }
 
-        public int InterviewCalls { get; set; }
+        public int RejectedJobs { get; set; }
 
         public int ProfileCompletion { get; set; }
 
