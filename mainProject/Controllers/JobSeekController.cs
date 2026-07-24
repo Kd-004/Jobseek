@@ -39,23 +39,22 @@ namespace JobPortal.Controllers
         }
 
         [HttpGet]
-        public IActionResult Upsert(int? id)
+      public IActionResult Upsert(int? id)
+{
+    if (id == null || id == 0)
+    {
+        var jobSeeker = new JobSeeker
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            DateOfBirth = new DateTime(2000, 1, 1)
+        };
 
-            var jobSeeker = _db.JobSeekers.FirstOrDefault(c => c.UserId == userId);
+        return View(jobSeeker);
+    }
 
-            if (jobSeeker == null)
-            {
-                // No profile exists for this user yet, create a new one
-                jobSeeker = new JobSeeker
-                {
-                    UserId = userId
-                };
-            }
+    var obj = _db.JobSeekers.FirstOrDefault(x => x.Id == id);
 
-            return View(jobSeeker);
-        }
+    return View(obj);
+}
 
         // POST: /JobSeek/Upsert
         [HttpPost]

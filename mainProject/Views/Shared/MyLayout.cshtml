@@ -145,27 +145,27 @@
                                 </a>
                             }
 
-                        <li class="nav-item">
-                            <a asp-controller="ApplyJob"
-                               asp-action="Applications"
-                               class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ApplyJob"
-                                                       && ViewContext.RouteData.Values["Action"]?.ToString() == "Applications"
-                                                       ? "active" : "")">
+                            <!-- Admin Only -->
+                            @if (User.IsInRole("Admin"))
+                            {
+                            <li class="nav-item">
+                                <a asp-controller="ApplyJob" asp-action="Applications" class="nav-link">
+                                    <i class="bi bi-file-earmark-person"></i>
+                                    <span>&nbsp &nbsp &nbsp Applications</span>
+                                </a>
+                            </li>
+                        }
 
-                                <i class="nav-icon bi bi-file-earmark-person"></i>
-                                <p>Applications</p>
-                            </a>
-
-
-                        <li class="nav-item">
-                            <a asp-controller="ApplyJob"
-                               asp-action="MyApplications"
-                               class="nav-link">
-                                <i class="bi bi-file-earmark-check"></i>
-                                <p>My Applications</p>
-                            </a>
-                        </li>
-
+                        <!-- User Only -->
+                        @if (User.IsInRole("User"))
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="ApplyJob" asp-action="MyApplications" class="nav-link">
+                                    <i class="bi bi-file-earmark-check"></i>
+                                    <span> &nbsp &nbsp &nbsp My Applications</span>
+                                </a>
+                            </li>
+                        }
                         
                     </ul>
                 </nav>
