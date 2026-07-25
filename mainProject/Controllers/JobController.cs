@@ -18,9 +18,21 @@ namespace mainProject.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewBag.HasCompany = await _context.Companies.AnyAsync(c => c.UserId == userId);
 
-            var jobs = await _context.Jobs.ToListAsync(); // adjust to your existing query
+            var company = await _context.Companies
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            ViewBag.HasCompany = company != null;
+
+            if (company == null)
+            {
+                return View(new List<Job>());
+            }
+
+            var jobs = await _context.Jobs
+                .Where(j => j.CompanyId == company.Id.ToString())
+                .ToListAsync();
+
             return View(jobs);
         }
         // GET: Job/Details/5

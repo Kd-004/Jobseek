@@ -80,85 +80,95 @@
 
     <div class="glass-card p-4">
 
-        <table class="table align-middle">
+        @if (Model.Any())
+        {
+            <table class="table align-middle">
 
-           
-
-            <thead>
-                <tr>
-                    <th>Applicant</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Job</th>
-                    <th>Resume</th>
-                    <th>Applied On</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (var item in Model)
-                {
+                <thead>
                     <tr>
-
-                        <td>@item.JobSeeker.FullName</td>
-
-                        <td>@item.JobSeeker.Email</td>
-
-                        <td>@item.JobSeeker.Phone</td>
-
-                        <td>@item.Job.JobTitle</td>
-
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.JobSeeker.ResumeFile))
-                            {
-                                <a href="@item.JobSeeker.ResumeFile"
-                                   target="_blank"
-                                   class="btn btn-outline-info btn-sm">
-                                    View Resume
-                                </a>
-                            }
-                            else
-                            {
-                                <span class="text-muted">No Resume</span>
-                            }
-                        </td>
-
-                        <td>@item.AppliedDate.ToString("dd MMM yyyy")</td>
-
-                        <td>@item.Status</td>
-
-                        <td>
-                            @if (item.Status == "Pending" || item.Status == "Applied")
-                            {
-                                <form asp-action="Accept" method="post" class="d-inline">
-                                    <input type="hidden" name="id" value="@item.Id" />
-                                    <button type="submit" class="btn btn-success btn-sm">
-                                        <i class="bi bi-check-circle"></i> Accept
-                                    </button>
-                                </form>
-
-                                <form asp-action="Reject" method="post" class="d-inline ms-1">
-                                    <input type="hidden" name="id" value="@item.Id" />
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="bi bi-x-circle"></i> Reject
-                                    </button>
-                                </form>
-                            }
-                            else if (item.Status == "Accepted")
-                            {
-                                <span class="badge bg-success">Accepted</span>
-                            }
-                            else if (item.Status == "Rejected")
-                            {
-                                <span class="badge bg-danger">Rejected</span>
-                            }
-                        </td>
+                        <th>Applicant</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Job</th>
+                        <th>Resume</th>
+                        <th>Applied On</th>
+                        <th>Status</th>
+                        <th>Action</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.JobSeeker.FullName</td>
+                            <td>@item.JobSeeker.Email</td>
+                            <td>@item.JobSeeker.Phone</td>
+                            <td>@item.Job.JobTitle</td>
+
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.JobSeeker.ResumeFile))
+                                {
+                                    <a href="@item.JobSeeker.ResumeFile"
+                                       target="_blank"
+                                       class="btn btn-outline-info btn-sm">
+                                        View Resume
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No Resume</span>
+                                }
+                            </td>
+
+                            <td>@item.AppliedDate.ToString("dd MMM yyyy")</td>
+
+                            <td>@item.Status</td>
+
+                            <td>
+                                @if (item.Status == "Pending" || item.Status == "Applied")
+                                {
+                                    <form asp-action="Accept" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <i class="bi bi-check-circle"></i> Accept
+                                        </button>
+                                    </form>
+
+                                    <form asp-action="Reject" method="post" class="d-inline ms-1">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-x-circle"></i> Reject
+                                        </button>
+                                    </form>
+                                }
+                                else if (item.Status == "Accepted")
+                                {
+                                    <span class="badge bg-success">Accepted</span>
+                                }
+                                else if (item.Status == "Rejected")
+                                {
+                                    <span class="badge bg-danger">Rejected</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-inbox display-3 text-secondary"></i>
+
+                <h4 class="text-white mt-3">No Applications Found</h4>
+
+                <p class="text-light">
+                    There are currently no job applications for your posted jobs.
+                </p>
+            </div>
+        }
 
     </div>
 

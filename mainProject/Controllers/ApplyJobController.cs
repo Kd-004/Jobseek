@@ -113,12 +113,24 @@ namespace mainProject.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Applications()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var company = await _context.Companies
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (company == null)
+            {
+                return View(new List<JobApplication>());
+            }
+
             var applications = await _context.JobApplications
                 .Include(a => a.Job)
                 .Include(a => a.JobSeeker)
                 .Include(a => a.Company)
+                .Where(a => a.CompanyId == company.Id)
                 .OrderByDescending(a => a.AppliedDate)
                 .ToListAsync();
 
@@ -214,8 +226,8 @@ namespace mainProject.Controllers
 
             if (jobSeeker == null)
             {
-                TempData["Error"] = "Job seeker profile not found.";
-                return RedirectToAction(nameof(Details));
+                TempData["Error"] = "Please complete your Job Seeker profile before applying for a job.";
+                return RedirectToAction("Index", "JobSeek");
             }
 
             bool alreadyApplied = await _context.JobApplications
