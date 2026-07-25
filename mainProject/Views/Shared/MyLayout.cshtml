@@ -45,60 +45,38 @@
 </head>
 <body>
     <div class="app-wrapper">
-       <nav class="app-header navbar navbar-expand navbar-theme">
-    <div class="container-fluid">
+        <nav class="app-header navbar navbar-expand navbar-theme">
+            <div class="container-fluid">
 
-        <!-- Left: sidebar toggle + brand -->
-        <ul class="navbar-nav align-items-center">
-            <li class="nav-item">
-                <a class="nav-link topbar-icon-btn" data-lte-toggle="sidebar" href="#" role="button">
-                    <i class="bi bi-list"></i>
-                </a>
-            </li>
-            <li class="nav-item d-none d-md-flex align-items-center ms-2">
-                <a href="/" class="topbar-brand">
-                    <i class="bi bi-briefcase-fill"></i>
-                    <span>JobSeek</span>
-                </a>
-            </li>
-        </ul>
-
-        <!-- Right: search, fullscreen, user -->
-        <ul class="navbar-nav ms-auto align-items-center">
-
-            <li class="nav-item">
-                <a class="nav-link topbar-icon-btn" data-widget="navbar-search" href="#" role="button">
-                    <i class="bi bi-search"></i>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link topbar-icon-btn" href="#" data-lte-toggle="fullscreen">
-                    <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
-                    <i data-lte-icon="minimize" class="bi bi-fullscreen-exit d-none"></i>
-                </a>
-            </li>
-
-            <li class="nav-item dropdown user-menu ms-1">
-                <a href="#" class="nav-link dropdown-toggle topbar-user" data-bs-toggle="dropdown">
-                    <img src="./assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User Image" />
-                    <span class="d-none d-md-inline">@(User.Identity.IsAuthenticated ? User.Identity.Name : "Guest")</span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                    <li class="user-header user-header-theme">
-                        <img src="./assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User Image" />
-                        <p>@(User.Identity.IsAuthenticated ? User.Identity.Name : "Guest")</p>
+                <!-- Left: sidebar toggle + brand -->
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link topbar-icon-btn" data-lte-toggle="sidebar" href="#" role="button">
+                            <i class="bi bi-list"></i>
+                        </a>
                     </li>
-                    <li class="user-footer">
-                        <a href="#" class="btn btn-outline-glass btn-sm">Profile</a>
-                        <a href="#" class="btn btn-outline-danger-glass btn-sm float-end">Sign out</a>
+                    <li class="nav-item d-none d-md-flex align-items-center ms-2">
+                        <a href="/" class="topbar-brand">
+                            <i class="bi bi-briefcase-fill"></i>
+                            <span>JobSeek</span>
+                        </a>
                     </li>
                 </ul>
-            </li>
 
-        </ul>
-    </div>
-</nav>
+                <!-- Right: search, fullscreen, user -->
+                <ul class="navbar-nav ms-auto align-items-center">
+
+
+                    <li class="nav-item">
+                        <a class="nav-link topbar-icon-btn" href="#" data-lte-toggle="fullscreen">
+                            <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
+                            <i data-lte-icon="minimize" class="bi bi-fullscreen-exit d-none"></i>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
 
         <aside class="app-sidebar sidebar-theme shadow" data-bs-theme="dark">
 
@@ -166,7 +144,7 @@
                                 </a>
                             </li>
                         }
-                        
+
                     </ul>
                 </nav>
 

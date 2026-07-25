@@ -143,7 +143,7 @@ public class RegisterAdminModel : PageModel
                 else
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
+                    return RedirectToAction("Index", "AdminDashboard");
                 }
             }
             foreach (var error in result.Errors)
