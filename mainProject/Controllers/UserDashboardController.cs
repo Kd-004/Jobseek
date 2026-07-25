@@ -60,11 +60,12 @@ namespace mainProject.Controllers
 
             // Recommended Jobs
             model.RecommendedJobs = await _context.Jobs
-                .Where(j => j.Status == "Open")
-                .OrderByDescending(j => j.PostedDate)
-                .Take(5)
-                .ToListAsync();
-
+       .Where(j => j.Status == "Open")
+       .Where(j => !_context.JobApplications
+           .Any(a => a.JobSeekerId == jobSeeker.Id && a.JobId == j.JobId))
+       .OrderByDescending(j => j.PostedDate)
+       .Take(5)
+       .ToListAsync();
             return View(model);
         }
     }

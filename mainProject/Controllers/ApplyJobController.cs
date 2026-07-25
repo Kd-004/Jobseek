@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using mainProject.Data;
+using mainProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using mainProject.Data;
-using mainProject.Models;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace mainProject.Controllers
@@ -22,14 +23,32 @@ namespace mainProject.Controllers
 
         // GET: /ApplyJob or /ApplyJob/Apply
         // Shows all open jobs, with optional search/category/location filters
-      
         [HttpGet]
         public async Task<IActionResult> Index(string search, string category, string location)
         {
+            // Logged-in user
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Get JobSeeker record
+            var jobSeeker = await _context.JobSeekers
+                .FirstOrDefaultAsync(x => x.UserId == userId);
+
             var jobsQuery = _context.Jobs
                 .Where(j => j.Status == "Open")
                 .AsQueryable();
 
+            // Hide already applied jobs
+            if (jobSeeker != null)
+            {
+                var appliedJobIds = await _context.JobApplications
+                    .Where(a => a.JobSeekerId == jobSeeker.Id)
+                    .Select(a => a.JobId)
+                    .ToListAsync();
+
+                jobsQuery = jobsQuery.Where(j => !appliedJobIds.Contains(j.JobId));
+            }
+
+            // Search
             if (!string.IsNullOrWhiteSpace(search))
             {
                 jobsQuery = jobsQuery.Where(j =>
@@ -37,36 +56,39 @@ namespace mainProject.Controllers
                     j.JobDescription.Contains(search));
             }
 
+            // Category
             if (!string.IsNullOrWhiteSpace(category))
             {
                 jobsQuery = jobsQuery.Where(j => j.Category == category);
             }
 
+            // Location
             if (!string.IsNullOrWhiteSpace(location))
             {
                 jobsQuery = jobsQuery.Where(j => j.Location.Contains(location));
             }
+
             var jobs = await jobsQuery
-      .OrderByDescending(j => j.PostedDate)
-      .GroupJoin(
-          _context.Companies,
-          job => job.CompanyId,
-          company => company.Id.ToString(),
-          (job, companies) => new { job, companies }
-      )
-      .SelectMany(
-          x => x.companies.DefaultIfEmpty(),
-          (x, company) => new JobWithCompany
-          {
-              Job = x.job,
-              CompanyName = company != null
-                  ? company.CompanyName
-                  : "Company not listed"
-          })
-      .ToListAsync();
+                .OrderByDescending(j => j.PostedDate)
+                .GroupJoin(
+                    _context.Companies,
+                    job => job.CompanyId,
+                    company => company.Id.ToString(),
+                    (job, companies) => new { job, companies }
+                )
+                .SelectMany(
+                    x => x.companies.DefaultIfEmpty(),
+                    (x, company) => new JobWithCompany
+                    {
+                        Job = x.job,
+                        CompanyName = company != null
+                            ? company.CompanyName
+                            : "Company not listed"
+                    })
+                .ToListAsync();
+
             return View(jobs);
         }
-
         [Authorize(Roles = "User")]
         public async Task<IActionResult> MyApplications()
         {
