@@ -4,9 +4,7 @@
 }
 
 <div class="theme-page py-5">
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2 glow-gold"></div>
-
+   
     <div class="container position-relative" style="height:100vh;">
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8">
@@ -38,8 +36,26 @@
                     </div>
 
                     <div class="card glass-card">
-                        <div class="card-header">
+                        <div class="card-header text-center">
+
+                            @if (!string.IsNullOrEmpty(Model.Logo))
+                            {
+                                <img src="@Model.Logo"
+                                     alt="Company Logo"
+                                     class="rounded-circle border border-3 border-warning shadow mb-3"
+                                     style="width:120px;height:120px;object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
+                                     style="width:120px;height:120px;">
+                                    <i class="bi bi-building text-white" style="font-size:48px;"></i>
+                                </div>
+                            }
+
                             <h3 class="fw-bold text-white mb-0">@Model.CompanyName</h3>
+                            <small class="text-light-50">@Model.Industry</small>
+
                         </div>
                         <div class="card-body p-4">
 

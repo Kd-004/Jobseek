@@ -26,65 +26,50 @@ namespace mainProject.Controllers
         // Dashboard
         public async Task<IActionResult> Index()
         {
-            // Logged-in Admin UserId
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Company belonging to the logged-in Admin
             var company = await _context.Companies
                 .FirstOrDefaultAsync(c => c.UserId == userId);
 
+            var model = new AdminDashboardViewModel();
+
             if (company == null)
             {
-                TempData["Error"] = "Please create your company profile first.";
-                return RedirectToAction("Upsert", "Company");
+              
+                return View(model);
             }
 
-            // Get all Job IDs belonging to this company
             var companyJobIds = await _context.Jobs
-     .Where(j => j.CompanyId == company.Id.ToString())
-     .Select(j => j.JobId)
-     .ToListAsync();
+                .Where(j => j.CompanyId == company.Id.ToString())
+                .Select(j => j.JobId)
+                .ToListAsync();
 
-            var model = new AdminDashboardViewModel
-            {
-                // Total Active Jobs
-                ActiveJobPostings = await _context.Jobs
-           .CountAsync(j =>
-               j.CompanyId == company.Id.ToString() &&
-               j.Status == "Open"),
+            model.ActiveJobPostings = await _context.Jobs
+                .CountAsync(j => j.CompanyId == company.Id.ToString() && j.Status == "Open");
 
-                // Total Applications
-                TotalApplications = await _context.JobApplications
-           .CountAsync(a => companyJobIds.Contains(a.JobId)),
+            model.TotalApplications = await _context.JobApplications
+                .CountAsync(a => companyJobIds.Contains(a.JobId));
 
-                // Accepted Candidates
-                ShortlistedCandidates = await _context.JobApplications
-           .CountAsync(a =>
-               companyJobIds.Contains(a.JobId) &&
-               a.Status == "Accepted"),
+            model.ShortlistedCandidates = await _context.JobApplications
+                .CountAsync(a => companyJobIds.Contains(a.JobId) && a.Status == "Accepted");
 
-                // Rejected Candidates
-                RejectedCandidates = await _context.JobApplications
-           .CountAsync(a =>
-               companyJobIds.Contains(a.JobId) &&
-               a.Status == "Rejected"),
+            model.RejectedCandidates = await _context.JobApplications
+                .CountAsync(a => companyJobIds.Contains(a.JobId) && a.Status == "Rejected");
 
-                // Recent Jobs
-                RecentJobPostings = await _context.Jobs
-           .Where(j => j.CompanyId == company.Id.ToString())
-           .OrderByDescending(j => j.PostedDate)
-           .Take(5)
-           .ToListAsync(),
+            model.RecentJobPostings = await _context.Jobs
+                .Where(j => j.CompanyId == company.Id.ToString())
+                .OrderByDescending(j => j.PostedDate)
+                .Take(5)
+                .ToListAsync();
 
-                // Recent Applicants
-                RecentApplicants = await _context.JobApplications
-           .Include(a => a.Job)
-           .Include(a => a.JobSeeker)
-           .Where(a => companyJobIds.Contains(a.JobId))
-           .OrderByDescending(a => a.AppliedDate)
-           .Take(5)
-           .ToListAsync()
-            };
+            model.RecentApplicants = await _context.JobApplications
+                .Include(a => a.Job)
+                .Include(a => a.JobSeeker)
+                .Where(a => companyJobIds.Contains(a.JobId))
+                .OrderByDescending(a => a.AppliedDate)
+                .Take(5)
+                .ToListAsync();
+
             return View(model);
         }
 

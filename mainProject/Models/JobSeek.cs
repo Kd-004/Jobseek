@@ -31,7 +31,7 @@ namespace JobPortal.Models
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters")]
-        public string Password { get; set; }
+        public string Password { get; set; }  = "Admin@123";
 
         [Required]
         [DataType(DataType.Date)]
@@ -99,6 +99,9 @@ namespace JobPortal.Models
         [Display(Name = "GitHub Profile")]
         [Url(ErrorMessage = "Enter a valid URL")]
         public string? GitHub { get; set; }
+
+        [NotMapped]
+        public string? ResumeUrl { get; set; }
 
         [Display(Name = "Registered On")]
         public DateTime CreatedDate { get; set; } = DateTime.Now;

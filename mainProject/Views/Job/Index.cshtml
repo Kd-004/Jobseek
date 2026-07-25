@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Shared/MyLayout.cshtml";
 }
-<div class="theme-page py-5" style="height:100vh;">
+<div class="theme-page py-5 px-4" style="height:100vh;">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 style="color:white;">Job List</h2>
 
@@ -50,17 +50,28 @@
                         <td>@item.EmploymentType</td>
                         <td>@item.Experience</td>
                         <td>@item.Qualification</td>
-                        <td>₹@item.Salary</td>
+                        <td>₹@item.Salary.ToString("N0")</td>
                         <td>@item.Vacancy</td>
                         <td>@item.LastDateToApply.ToString("dd-MM-yyyy")</td>
                         <td>
+
                             @if (item.Status == "Open")
                             {
-                                <span class="badge bg-success">@item.Status</span>
+                                <span class="badge bg-success">
+                                    Open
+                                </span>
+                            }
+                            else if (item.Status == "On Hold")
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    On Hold
+                                </span>
                             }
                             else
                             {
-                                <span class="badge bg-danger">@item.Status</span>
+                                <span class="badge bg-secondary">
+                                    Closed
+                                </span>
                             }
                         </td>
 

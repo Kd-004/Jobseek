@@ -4,8 +4,7 @@
 }
 
 <div class="theme-page py-5">
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2 glow-gold"></div>
+  
 
     <div class="container position-relative">
         <div class="row justify-content-center">
@@ -22,8 +21,9 @@
 
                 <div class="card glass-card">
                     <div class="card-body p-4 p-md-5">
-
                         <form asp-action="Upsert" method="post" enctype="multipart/form-data" asp-controller="Company">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                             <input type="hidden" asp-for="Id" />
                             <input type="hidden" asp-for="UserId" />
@@ -32,30 +32,43 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label asp-for="CompanyName" class="form-label text-light-50"></label>
-                                    <input type="text" asp-for="CompanyName" class="form-control dark-input" />
+                                    <input asp-for="CompanyName" class="form-control dark-input" />
                                     <span asp-validation-for="CompanyName" class="text-danger small"></span>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label asp-for="Email" class="form-label text-light-50"></label>
-                                    <input type="email" asp-for="Email" class="form-control dark-input" />
+                                    <input asp-for="Email" class="form-control dark-input" />
                                     <span asp-validation-for="Email" class="text-danger small"></span>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label asp-for="Phone" class="form-label text-light-50"></label>
-                                    <input type="text" asp-for="Phone" class="form-control dark-input" />
+                                    <input asp-for="Phone" class="form-control dark-input" />
                                     <span asp-validation-for="Phone" class="text-danger small"></span>
                                 </div>
-
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label text-light-50">Company Logo</label>
-                                    <input type="file" name="logoFile" class="form-control dark-input dark-file-input" />
+                                    <input type="file"
+                                           name="logoFile"
+                                           class="form-control dark-input dark-file-input"
+                                           accept=".jpg,.jpeg,.png,.gif,.webp" />
+
+                                    @if (!string.IsNullOrEmpty(Model.Logo))
+                                    {
+                                        <div class="mt-3">
+                                            <img src="@Model.Logo"
+                                                 alt="Company Logo"
+                                                 class="img-thumbnail"
+                                                 style="max-width:150px;max-height:150px;" />
+                                        </div>
+                                    }
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label asp-for="Website" class="form-label text-light-50"></label>
-                                    <input type="url" asp-for="Website" class="form-control dark-input" />
+                                    <input asp-for="Website" class="form-control dark-input" placeholder="https://www.company.com" />
+                                    <span asp-validation-for="Website" class="text-danger small"></span>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
@@ -71,39 +84,42 @@
                                         <option>Marketing</option>
                                         <option>Other</option>
                                     </select>
+                                    <span asp-validation-for="Industry" class="text-danger small"></span>
                                 </div>
 
                                 <div class="col-12 mb-3">
                                     <label asp-for="Description" class="form-label text-light-50"></label>
-                                    <textarea asp-for="Description" class="form-control dark-input" rows="4"></textarea>
+                                    <textarea asp-for="Description" rows="4" class="form-control dark-input"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger small"></span>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label asp-for="Address" class="form-label text-light-50"></label>
-                                    <input type="text" asp-for="Address" class="form-control dark-input" />
+                                    <input asp-for="Address" class="form-control dark-input" />
+                                    <span asp-validation-for="Address" class="text-danger small"></span>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label asp-for="City" class="form-label text-light-50"></label>
-                                    <input type="text" asp-for="City" class="form-control dark-input" />
+                                    <input asp-for="City" class="form-control dark-input" />
+                                    <span asp-validation-for="City" class="text-danger small"></span>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label asp-for="State" class="form-label text-light-50"></label>
-                                    <input type="text" asp-for="State" class="form-control dark-input" />
+                                    <input asp-for="State" class="form-control dark-input" />
                                     <span asp-validation-for="State" class="text-danger small"></span>
-
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label asp-for="Country" class="form-label text-light-50"></label>
-                                    <input type="text" asp-for="Country" class="form-control dark-input" />
+                                    <input asp-for="Country" class="form-control dark-input" />
+                                    <span asp-validation-for="Country" class="text-danger small"></span>
                                 </div>
 
                             </div>
 
                             <div class="d-flex flex-wrap gap-2 mt-3">
-
                                 @if (Model.Id == 0)
                                 {
                                     <button type="submit" class="btn btn-gradient-primary px-4">
@@ -116,19 +132,20 @@
                                         <i class="bi bi-arrow-repeat me-1"></i> Update Company
                                     </button>
                                 }
-
-                                <button type="submit"
-                                        class="btn btn-outline-danger-glass px-4"
-                                        formaction="@Url.Action("Delete", "Company")"
-                                        formmethod="post"
-                                        onclick="return confirm('Are you sure you want to delete this company?');">
-                                    <i class="bi bi-trash me-1"></i> Delete
-                                </button>
+                                @if (Model.Id > 0)
+                                {
+                                    <button type="submit"
+                                    class="btn btn-outline-danger-glass px-4"
+                                    formaction="@Url.Action("Delete", "Company")"
+                                    formmethod="post"
+                                    onclick="return confirm('Are you sure you want to delete this company?');">
+                                        <i class="bi bi-trash me-1"></i> Delete
+                                    </button>
+                                }
 
                                 <a asp-action="Index" class="btn btn-outline-glass px-4">
-                                    <i class="bi bi-arrow-left me-1"></i> Back to List
+                                    <i class="bi bi-arrow-left me-1"></i> Back
                                 </a>
-
                             </div>
                         </form>
 

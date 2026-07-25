@@ -77,7 +77,7 @@ namespace mainProject.Controllers
 
             if (jobSeeker == null)
             {
-                return NotFound();
+                return View(new List<JobApplication>());
             }
 
             var applications = await _context.JobApplications

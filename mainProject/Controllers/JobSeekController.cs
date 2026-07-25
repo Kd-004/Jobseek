@@ -37,24 +37,31 @@ namespace JobPortal.Controllers
 
             return View(jobSeeker);
         }
-
         [HttpGet]
-      public IActionResult Upsert(int? id)
-{
-    if (id == null || id == 0)
-    {
-        var jobSeeker = new JobSeeker
+        public IActionResult Upsert(int? id)
         {
-            DateOfBirth = new DateTime(2000, 1, 1)
-        };
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        return View(jobSeeker);
-    }
+            if (id == null || id == 0)
+            {
+                var jobSeeker = new JobSeeker
+                {
+                    UserId = userId, // Set logged-in user ID
+                    DateOfBirth = new DateTime(2000, 1, 1)
+                };
 
-    var obj = _db.JobSeekers.FirstOrDefault(x => x.Id == id);
+                return View(jobSeeker);
+            }
 
-    return View(obj);
-}
+            var obj = _db.JobSeekers.FirstOrDefault(x => x.Id == id && x.UserId == userId);
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
 
         // POST: /JobSeek/Upsert
         [HttpPost]

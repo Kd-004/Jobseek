@@ -5,9 +5,7 @@
 }
 
 <div class="theme-page py-5">
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2 glow-gold"></div>
-
+   
     <div class="container position-relative">
         <div class="row justify-content-center">
             <div class="col-lg-9">
@@ -94,7 +92,13 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label asp-for="Salary" class="form-label text-light-50"></label>
-                                    <input type="number" asp-for="Salary" class="form-control dark-input"  min="10000" step="1000" />
+                                    <input type="number"
+                                           name="Salary"
+                                           id="Salary"
+                                           class="form-control dark-input"
+                                           value="@Model.Salary.ToString("0")"
+                                           min="10000"
+                                           step="1000" />
                                     <span asp-validation-for="Salary" class="text-danger small"></span>
                                 </div>
 
@@ -144,14 +148,16 @@
                                     </button>
                                 }
 
-                                <button type="submit"
-                                        class="btn btn-outline-danger-glass px-4"
-                                        formaction="@Url.Action("Delete", "Job")"
-                                        formmethod="post"
-                                        onclick="return confirm('Are you sure you want to delete this job?');">
-                                    <i class="bi bi-trash me-1"></i> Delete
-                                </button>
-
+                                @if (Model.JobId > 0)
+                                {
+                                    <button type="submit"
+                                    class="btn btn-outline-danger-glass px-4"
+                                    formaction="@Url.Action("Delete", "Job")"
+                                    formmethod="post"
+                                    onclick="return confirm('Are you sure you want to delete this job?');">
+                                        <i class="bi bi-trash me-1"></i> Delete
+                                    </button>
+                                }
                                 <a asp-action="Index" class="btn btn-outline-glass px-4">
                                     <i class="bi bi-arrow-left me-1"></i> Back to List
                                 </a>

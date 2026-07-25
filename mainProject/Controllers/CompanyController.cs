@@ -76,10 +76,9 @@ namespace mainProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(Company company, IFormFile? logoFile)
+        public async Task<IActionResult> Upsert(Company company, IFormFile? logoFile)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             company.UserId = userId;
 
             if (!ModelState.IsValid)
@@ -87,12 +86,38 @@ namespace mainProject.Controllers
                 return View(company);
             }
 
-            var existingCompany = _context.Companies.FirstOrDefault(c => c.UserId == userId);
+            // Upload Logo
+            if (logoFile != null && logoFile.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    "uploads",
+                    "company");
+
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(logoFile.FileName);
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await logoFile.CopyToAsync(stream);
+                }
+
+                company.Logo = "/uploads/company/" + fileName;
+            }
+
+            var existingCompany = await _context.Companies
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
             if (existingCompany == null)
             {
                 company.CreatedDate = DateTime.Now;
-                _context.Companies.Add(company);
+                await _context.Companies.AddAsync(company);
             }
             else
             {
@@ -107,20 +132,36 @@ namespace mainProject.Controllers
                 existingCompany.State = company.State;
                 existingCompany.Country = company.Country;
 
-                // Update logo if uploaded
+                // Update Logo
                 if (!string.IsNullOrEmpty(company.Logo))
                 {
+                    // Delete old logo
+                    if (!string.IsNullOrEmpty(existingCompany.Logo))
+                    {
+                        var oldFile = Path.Combine(
+                            Directory.GetCurrentDirectory(),
+                            "wwwroot",
+                            existingCompany.Logo.TrimStart('/')
+                                .Replace("/", Path.DirectorySeparatorChar.ToString()));
+
+                        if (System.IO.File.Exists(oldFile))
+                        {
+                            System.IO.File.Delete(oldFile);
+                        }
+                    }
+
                     existingCompany.Logo = company.Logo;
                 }
 
                 _context.Companies.Update(existingCompany);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Company profile saved successfully.";
 
             return RedirectToAction(nameof(Index));
         }
-
         // GET: Company/Details/5 — PUBLIC company page (job seekers/guests browse this)
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
