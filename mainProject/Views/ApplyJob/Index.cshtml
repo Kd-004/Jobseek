@@ -5,9 +5,7 @@
 }
 
 <div class="theme-page py-5">
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2 glow-gold"></div>
-
+ 
     <div class="container position-relative">
 
         <div class="text-center mb-5">
@@ -23,7 +21,7 @@
         <!-- Filter Bar -->
         <div class="card glass-card mb-5">
             <div class="card-body p-4">
-                <form asp-action="Apply" asp-controller="Job" method="get">
+                <form asp-action="Index" asp-controller="ApplyJob" method="get">
                     <div class="row g-3 align-items-end">
 
                         <div class="col-md-4">
@@ -64,11 +62,18 @@
                         </div>
 
                         <div class="col-md-2">
-                            <button type="submit" class="btn btn-gradient-primary w-100">
-                                Filter
-                            </button>
-                        </div>
+                            <div class="d-flex gap-3">
+                                <button type="submit" class="btn btn-gradient-primary">
+                                    <i class="bi bi-funnel me-1"></i> Filter
+                                </button>
 
+                                <a asp-action="Index"
+                                   asp-controller="ApplyJob"
+                                   class="btn btn-outline-light">
+                                    <i class="bi bi-arrow-clockwise me-1"></i> Clear
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
