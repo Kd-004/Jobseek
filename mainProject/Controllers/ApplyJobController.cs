@@ -239,8 +239,9 @@ namespace mainProject.Controllers
             _context.JobApplications.Add(application);
             await _context.SaveChangesAsync();
 
-            TempData["Success"] = $"You have successfully applied for {job.JobTitle}.";
-            return RedirectToAction(nameof(Details), new { jobId = jobId });
+
+            TempData["Success"] = $"You have successfully applied for '{job.JobTitle}'.";
+            return RedirectToAction(nameof(Index));
         }
         public IActionResult Test()
         {

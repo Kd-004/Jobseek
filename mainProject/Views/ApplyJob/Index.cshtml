@@ -4,6 +4,25 @@
     ViewData["Title"] = "Browse Jobs";
 }
 
+@if (TempData["Success"] != null)
+{
+    <div id="successAlert" class="m-4 alert alert-success alert-dismissible fade show mb-4" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="m-4 alert alert-danger alert-dismissible fade show mb-4" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+
 <div class="theme-page py-5">
  
     <div class="container position-relative">
@@ -177,3 +196,16 @@
 
     </div>
 </div>
+<script>
+    setTimeout(function () {
+        var successAlert = document.getElementById("successAlert");
+        if (successAlert) {
+            successAlert.remove();
+        }
+
+        var errorAlert = document.getElementById("errorAlert");
+        if (errorAlert) {
+            errorAlert.remove();
+        }
+    }, 2000); // 5 seconds
+</script>
