@@ -5,8 +5,6 @@
 }
 
 <div class="theme-page py-5">
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2 glow-gold"></div>
 
     <div class="container position-relative">
 
@@ -161,20 +159,26 @@
         <!-- Buttons -->
         <div class="text-center mt-5">
 
-            <form asp-controller="JobSeek" asp-action="Upsert" method="post">
+            <form asp-controller="ApplyJob"
+                  asp-action="JobApply"
+                  method="post"
+                  class="d-inline">
+
                 <input type="hidden" name="jobId" value="@Model.Job.JobId" />
 
-                <button type="submit" class="btn btn-gold btn-lg px-5 me-3">
+                <button type="submit" class="btn btn-gold btn-lg px-5 me-2">
                     <i class="bi bi-send-fill me-1"></i>
                     Apply Now
                 </button>
-            </form>>
+            </form>
 
-            <a  asp-controller="ApplyJob" asp-action="Details" class="btn btn-outline-glass btn-lg">
-                <i class="bi bi-arrow-left me-1"></i> Back to Jobs
+            <a asp-controller="ApplyJob"
+               asp-action="Index"
+               class="btn btn-outline-glass btn-lg">
+                <i class="bi bi-arrow-left me-1"></i>
+                Back to Jobs
             </a>
 
         </div>
-
     </div>
 </div>

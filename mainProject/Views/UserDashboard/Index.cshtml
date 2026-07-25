@@ -140,7 +140,10 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <a asp-controller="ApplyJob" asp-action="JobDetails" asp-route-id="@job.JobId" class="btn btn-sm btn-gradient-primary">
+                                                <a asp-controller="ApplyJob"
+                                                   asp-action="Details"
+                                                   asp-route-jobId="@job.JobId"
+                                                   class="btn btn-sm btn-gradient-primary">
                                                     Apply Now
                                                 </a>
                                             </div>
