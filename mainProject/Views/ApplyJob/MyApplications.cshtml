@@ -1,55 +1,143 @@
-﻿@foreach (var item in Model)
-{
-    <div class="theme-page p-5" style="height:100vh;">
-    <tr>
-        <td>@item.Job.JobTitle</td>
-        <td>@item.Company.CompanyName</td>
-        <td>@item.AppliedDate.ToString("dd MMM yyyy")</td>
+﻿@model IEnumerable<mainProject.Models.JobApplication>
 
-        <td>
-            @if (item.Status == "Accepted")
-            {
-                <span class="badge bg-success">
-                    <i class="bi bi-check-circle-fill"></i> Accepted
-                </span>
-            }
-            else if (item.Status == "Rejected")
-            {
-                <span class="badge bg-danger">
-                    <i class="bi bi-x-circle-fill"></i> Rejected
-                </span>
-            }
-            else
-            {
-                <span class="badge bg-warning text-dark">
-                    <i class="bi bi-clock-history"></i> Pending
-                </span>
-            }
-        </td>
-    </tr>
-
-    @if (item.Status == "Accepted")
-    {
-        <tr>
-            <td colspan="4">
-                <div class="alert alert-success mt-2">
-                    <i class="bi bi-trophy-fill"></i>
-                    Congratulations! Your application has been accepted. The company will contact you soon.
-                </div>
-            </td>
-        </tr>
-    }
-
-    @if (item.Status == "Rejected")
-    {
-        <tr>
-            <td colspan="4">
-                <div class="alert alert-danger mt-2">
-                    <i class="bi bi-x-circle-fill"></i>
-                    Unfortunately, your application was not selected.
-                </div>
-            </td>
-        </tr>
-    }
-        </div>
+@{
+    ViewData["Title"] = "My Applications";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
 }
+
+<div class="theme-page py-5 h-100">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="app-content-header mb-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                    <h3 class="fw-bold text-white mb-1">
+                        <i class="bi bi-file-earmark-text me-2"></i>My Applications
+                    </h3>
+                    <p class="text-light-50 mb-0">
+                        Track the status of all your job applications.
+                    </p>
+                </div>
+
+                <span class="badge bg-primary fs-6">
+                    @Model.Count() Applications
+                </span>
+            </div>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="row g-4">
+
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-6">
+                        <div class="card glass-card h-100">
+
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between align-items-start">
+
+                                    <div>
+                                        <h5 class="text-white fw-bold mb-1">
+                                            @item.Job.JobTitle
+                                        </h5>
+
+                                        <p class="text-light-50 mb-2">
+                                            <i class="bi bi-building me-1"></i>
+                                            @item.Company.CompanyName
+                                        </p>
+
+                                        <small class="text-secondary">
+                                            <i class="bi bi-calendar-event me-1"></i>
+                                            Applied on @item.AppliedDate.ToString("dd MMM yyyy")
+                                        </small>
+                                    </div>
+
+                                    <div>
+                                        @if (item.Status == "Accepted")
+                                        {
+                                            <span class="badge bg-success px-3 py-2">
+                                                <i class="bi bi-check-circle-fill me-1"></i>
+                                                Accepted
+                                            </span>
+                                        }
+                                        else if (item.Status == "Rejected")
+                                        {
+                                            <span class="badge bg-danger px-3 py-2">
+                                                <i class="bi bi-x-circle-fill me-1"></i>
+                                                Rejected
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark px-3 py-2">
+                                                <i class="bi bi-clock-history me-1"></i>
+                                                Pending
+                                            </span>
+                                        }
+                                    </div>
+
+                                </div>
+
+                                <hr class="border-secondary" />
+
+                                @if (item.Status == "Accepted")
+                                {
+                                    <div class="alert alert-success mb-0">
+                                        <i class="bi bi-trophy-fill me-2"></i>
+                                        Congratulations! Your application has been accepted. The company will contact you soon.
+                                    </div>
+                                }
+                                else if (item.Status == "Rejected")
+                                {
+                                    <div class="alert alert-danger mb-0">
+                                        <i class="bi bi-x-circle-fill me-2"></i>
+                                        Unfortunately, your application was not selected.
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-warning mb-0">
+                                        <i class="bi bi-hourglass-split me-2"></i>
+                                        Your application is currently under review.
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="card glass-card">
+                <div class="card-body text-center py-5">
+
+                    <i class="bi bi-file-earmark-x display-4 text-secondary"></i>
+
+                    <h4 class="text-white mt-3">
+                        No Applications Yet
+                    </h4>
+
+                    <p class="text-light-50">
+                        You haven't applied for any jobs yet.
+                    </p>
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="btn btn-gradient-primary">
+                        <i class="bi bi-search me-2"></i>
+                        Browse Jobs
+                    </a>
+
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
