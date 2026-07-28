@@ -19,9 +19,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark navbar-theme sticky-top">
             <div class="container">
 
-                <a class="navbar-brand fw-bold"
-                   asp-controller="AdminDashboard"
-                   asp-action="Index">
+                <a class="navbar-brand fw-bold" href="#home">
                     <i class="bi bi-briefcase-fill me-1"></i>JobSeek
                 </a>
 
@@ -36,36 +34,27 @@
 
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="AdminDashboard"
-                               asp-action="Index">Home</a>
+                            <a class="nav-link" href="#home">Home</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Job"
-                               asp-action="Index">Jobs</a>
+                            <a class="nav-link" href="#jobs">Jobs</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Company"
-                               asp-action="Index">Companies</a>
+                            <a class="nav-link" href="#companies">Companies</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Home"
-                               asp-action="Privacy">About</a>
+                            <a class="nav-link" href="#about">About</a>
                         </li>
                     </ul>
 
                     <div class="d-flex align-items-center gap-3">
                         <partial name="_LoginPartial" />
-
-                       
                     </div>
 
+                </div>
                 </div>
             </div>
         </nav>

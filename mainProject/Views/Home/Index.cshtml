@@ -241,7 +241,7 @@
 </style>
 
 <!-- ================= HERO SECTION ================= -->
-<section class="hero-section">
+<section id="home" class="hero-section">
     <div class="glow hero-glow-1"></div>
     <div class="glow hero-glow-2"></div>
 
@@ -263,7 +263,7 @@
                 </p>
 
                 <div class="mt-4">
-                    <a asp-controller="Job" asp-action="Index" class="btn btn-gold btn-lg px-4 rounded-pill me-3 shadow">
+                    <a href="#jobs" class="btn btn-gold btn-lg px-4 rounded-pill me-3 shadow">
                         <i class="bi bi-search me-2"></i>Browse Jobs
                     </a>
                     <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-glass btn-lg px-4 rounded-pill">
@@ -390,7 +390,7 @@
 </section>
 
 <!-- ================= LATEST JOBS ================= -->
-<section class="py-5 section-alt">
+<section id="jobs" class="py-5 section-alt">
     <div class="container">
         <div class="text-center mb-5">
             <span class="badge rounded-pill eyebrow-badge px-3 py-2">
@@ -463,7 +463,7 @@
 </section>
 
 <!-- ================= STATISTICS ================= -->
-<section class="py-5 section-dark">
+<section id="companies" class="py-5 section-dark">
     <div class="container">
         <div class="row text-center">
             <div class="col-md-3">
@@ -487,7 +487,7 @@
 </section>
 
 <!-- ================= WHY CHOOSE US ================= -->
-<section class="py-5 section-alt">
+<section id="about" class="py-5 section-alt">
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="fw-bold text-white">Why Choose JobSeek?</h2>
